@@ -1,198 +1,170 @@
-import express from 'express'
-import net from 'node:net'
-import cors from 'cors'
-import helmet from 'helmet'
-import morgan from 'morgan'
-import { createProxyMiddleware, fixRequestBody } from 'http-proxy-middleware' // 🎯 AJOUT : fixRequestBody ici
-import { authMiddleware } from './middleware/auth'
-
-const app = express()
-const PORT = process.env.PORT || 3000
-
-const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:8001'
-const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://localhost:8002'
-const ORDER_SERVICE_URL = process.env.ORDER_SERVICE_URL || 'http://localhost:8003'
-
-const IS_DOCKER_NETWORK =
-  USER_SERVICE_URL.includes('user-service') ||
-  PRODUCT_SERVICE_URL.includes('product-service') ||
-  ORDER_SERVICE_URL.includes('order-service')
-
-function envPort(name: string, fallback: number) {
-  const value = process.env[name]
-  if (!value) {
-    return fallback
-  }
-
-  const parsed = Number(value)
-  return Number.isFinite(parsed) ? parsed : fallback
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const node_net_1 = __importDefault(require("node:net"));
+const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
+const morgan_1 = __importDefault(require("morgan"));
+const http_proxy_middleware_1 = require("http-proxy-middleware"); // 🎯 AJOUT : fixRequestBody ici
+const auth_1 = require("./middleware/auth");
+const app = (0, express_1.default)();
+const PORT = process.env.PORT || 3000;
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:8001';
+const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://localhost:8002';
+const ORDER_SERVICE_URL = process.env.ORDER_SERVICE_URL || 'http://localhost:8003';
+const IS_DOCKER_NETWORK = USER_SERVICE_URL.includes('user-service') ||
+    PRODUCT_SERVICE_URL.includes('product-service') ||
+    ORDER_SERVICE_URL.includes('order-service');
+function envPort(name, fallback) {
+    const value = process.env[name];
+    if (!value) {
+        return fallback;
+    }
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
 }
-
-const RABBITMQ_HOST = process.env.RABBITMQ_HOST || (IS_DOCKER_NETWORK ? 'rabbitmq' : 'localhost')
-const RABBITMQ_PORT = envPort('RABBITMQ_PORT', 5672)
-
-const DB_USERS_HOST = process.env.DB_USERS_HOST || (IS_DOCKER_NETWORK ? 'db-users' : 'localhost')
-const DB_USERS_PORT = envPort('DB_USERS_PORT', 5432)
-
-const DB_PRODUCTS_HOST = process.env.DB_PRODUCTS_HOST || (IS_DOCKER_NETWORK ? 'db-products' : 'localhost')
-const DB_PRODUCTS_PORT = envPort('DB_PRODUCTS_PORT', IS_DOCKER_NETWORK ? 5432 : 5433)
-
-const DB_ORDERS_HOST = process.env.DB_ORDERS_HOST || (IS_DOCKER_NETWORK ? 'db-orders' : 'localhost')
-const DB_ORDERS_PORT = envPort('DB_ORDERS_PORT', IS_DOCKER_NETWORK ? 5432 : 5434)
-
-type ServiceStatus = 'up' | 'down' | 'unknown'
-type HealthMode = 'http' | 'tcp' | 'none'
-
-type ArchitectureService = {
-  id: string
-  name: string
-  protocol: string
-  url: string
-  healthMode: HealthMode
-  healthPath?: string
-  host?: string
-  port?: number
-  notes?: string
-}
-
-const architectureServices: ArchitectureService[] = [
-  {
-    id: 'api-gateway',
-    name: 'API Gateway',
-    protocol: 'HTTP',
-    url: `http://localhost:${PORT}`,
-    healthMode: 'http',
-    healthPath: '/health',
-    notes: 'Point d\'entree unique'
-  },
-  {
-    id: 'user-service',
-    name: 'User Service',
-    protocol: 'HTTP',
-    url: USER_SERVICE_URL,
-    healthMode: 'http',
-    healthPath: '/health',
-    notes: 'Authentification et utilisateurs'
-  },
-  {
-    id: 'product-service',
-    name: 'Product Service',
-    protocol: 'HTTP',
-    url: PRODUCT_SERVICE_URL,
-    healthMode: 'http',
-    healthPath: '/health',
-    notes: 'Catalogue produits'
-  },
-  {
-    id: 'order-service',
-    name: 'Order Service',
-    protocol: 'HTTP',
-    url: ORDER_SERVICE_URL,
-    healthMode: 'http',
-    healthPath: '/orders/health',
-    notes: 'Gestion des commandes'
-  },
-  {
-    id: 'rabbitmq',
-    name: 'RabbitMQ',
-    protocol: 'AMQP',
-    url: `${RABBITMQ_HOST}:${RABBITMQ_PORT}`,
-    healthMode: 'tcp',
-    host: RABBITMQ_HOST,
-    port: RABBITMQ_PORT,
-    notes: 'Communication asynchrone'
-  },
-  {
-    id: 'db-users',
-    name: 'DB Users',
-    protocol: 'PostgreSQL',
-    url: `${DB_USERS_HOST}:${DB_USERS_PORT}`,
-    healthMode: 'tcp',
-    host: DB_USERS_HOST,
-    port: DB_USERS_PORT
-  },
-  {
-    id: 'db-products',
-    name: 'DB Products',
-    protocol: 'PostgreSQL',
-    url: `${DB_PRODUCTS_HOST}:${DB_PRODUCTS_PORT}`,
-    healthMode: 'tcp',
-    host: DB_PRODUCTS_HOST,
-    port: DB_PRODUCTS_PORT
-  },
-  {
-    id: 'db-orders',
-    name: 'DB Orders',
-    protocol: 'PostgreSQL',
-    url: `${DB_ORDERS_HOST}:${DB_ORDERS_PORT}`,
-    healthMode: 'tcp',
-    host: DB_ORDERS_HOST,
-    port: DB_ORDERS_PORT
-  }
-]
-
+const RABBITMQ_HOST = process.env.RABBITMQ_HOST || (IS_DOCKER_NETWORK ? 'rabbitmq' : 'localhost');
+const RABBITMQ_PORT = envPort('RABBITMQ_PORT', 5672);
+const DB_USERS_HOST = process.env.DB_USERS_HOST || (IS_DOCKER_NETWORK ? 'db-users' : 'localhost');
+const DB_USERS_PORT = envPort('DB_USERS_PORT', 5432);
+const DB_PRODUCTS_HOST = process.env.DB_PRODUCTS_HOST || (IS_DOCKER_NETWORK ? 'db-products' : 'localhost');
+const DB_PRODUCTS_PORT = envPort('DB_PRODUCTS_PORT', IS_DOCKER_NETWORK ? 5432 : 5433);
+const DB_ORDERS_HOST = process.env.DB_ORDERS_HOST || (IS_DOCKER_NETWORK ? 'db-orders' : 'localhost');
+const DB_ORDERS_PORT = envPort('DB_ORDERS_PORT', IS_DOCKER_NETWORK ? 5432 : 5434);
+const architectureServices = [
+    {
+        id: 'api-gateway',
+        name: 'API Gateway',
+        protocol: 'HTTP',
+        url: `http://localhost:${PORT}`,
+        healthMode: 'http',
+        healthPath: '/health',
+        notes: 'Point d\'entree unique'
+    },
+    {
+        id: 'user-service',
+        name: 'User Service',
+        protocol: 'HTTP',
+        url: USER_SERVICE_URL,
+        healthMode: 'http',
+        healthPath: '/health',
+        notes: 'Authentification et utilisateurs'
+    },
+    {
+        id: 'product-service',
+        name: 'Product Service',
+        protocol: 'HTTP',
+        url: PRODUCT_SERVICE_URL,
+        healthMode: 'http',
+        healthPath: '/health',
+        notes: 'Catalogue produits'
+    },
+    {
+        id: 'order-service',
+        name: 'Order Service',
+        protocol: 'HTTP',
+        url: ORDER_SERVICE_URL,
+        healthMode: 'http',
+        healthPath: '/orders/health',
+        notes: 'Gestion des commandes'
+    },
+    {
+        id: 'rabbitmq',
+        name: 'RabbitMQ',
+        protocol: 'AMQP',
+        url: `${RABBITMQ_HOST}:${RABBITMQ_PORT}`,
+        healthMode: 'tcp',
+        host: RABBITMQ_HOST,
+        port: RABBITMQ_PORT,
+        notes: 'Communication asynchrone'
+    },
+    {
+        id: 'db-users',
+        name: 'DB Users',
+        protocol: 'PostgreSQL',
+        url: `${DB_USERS_HOST}:${DB_USERS_PORT}`,
+        healthMode: 'tcp',
+        host: DB_USERS_HOST,
+        port: DB_USERS_PORT
+    },
+    {
+        id: 'db-products',
+        name: 'DB Products',
+        protocol: 'PostgreSQL',
+        url: `${DB_PRODUCTS_HOST}:${DB_PRODUCTS_PORT}`,
+        healthMode: 'tcp',
+        host: DB_PRODUCTS_HOST,
+        port: DB_PRODUCTS_PORT
+    },
+    {
+        id: 'db-orders',
+        name: 'DB Orders',
+        protocol: 'PostgreSQL',
+        url: `${DB_ORDERS_HOST}:${DB_ORDERS_PORT}`,
+        healthMode: 'tcp',
+        host: DB_ORDERS_HOST,
+        port: DB_ORDERS_PORT
+    }
+];
 const architectureLinks = [
-  { from: 'client', to: 'api-gateway', type: 'HTTPS', description: 'Requetes client' },
-  { from: 'api-gateway', to: 'user-service', type: 'HTTP', description: 'Proxy /api/users/*' },
-  { from: 'api-gateway', to: 'product-service', type: 'HTTP', description: 'Proxy /api/products/*' },
-  { from: 'api-gateway', to: 'order-service', type: 'HTTP', description: 'Proxy /api/orders/*' },
-  { from: 'user-service', to: 'db-users', type: 'SQL', description: 'CRUD utilisateurs' },
-  { from: 'product-service', to: 'db-products', type: 'SQL', description: 'CRUD produits' },
-  { from: 'order-service', to: 'db-orders', type: 'SQL', description: 'CRUD commandes' },
-  { from: 'order-service', to: 'rabbitmq', type: 'AMQP', description: 'Events commande' }
-]
-
-async function checkHttpService(url: string, healthPath: string) {
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 3000)
-  const startedAt = Date.now()
-
-  try {
-    const response = await fetch(`${url}${healthPath}`, { signal: controller.signal })
-    const latencyMs = Date.now() - startedAt
-
-    return {
-      status: (response.ok ? 'up' : 'down') as ServiceStatus,
-      latencyMs,
-      endpoint: `${url}${healthPath}`
+    { from: 'client', to: 'api-gateway', type: 'HTTPS', description: 'Requetes client' },
+    { from: 'api-gateway', to: 'user-service', type: 'HTTP', description: 'Proxy /api/users/*' },
+    { from: 'api-gateway', to: 'product-service', type: 'HTTP', description: 'Proxy /api/products/*' },
+    { from: 'api-gateway', to: 'order-service', type: 'HTTP', description: 'Proxy /api/orders/*' },
+    { from: 'user-service', to: 'db-users', type: 'SQL', description: 'CRUD utilisateurs' },
+    { from: 'product-service', to: 'db-products', type: 'SQL', description: 'CRUD produits' },
+    { from: 'order-service', to: 'db-orders', type: 'SQL', description: 'CRUD commandes' },
+    { from: 'order-service', to: 'rabbitmq', type: 'AMQP', description: 'Events commande' }
+];
+async function checkHttpService(url, healthPath) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const startedAt = Date.now();
+    try {
+        const response = await fetch(`${url}${healthPath}`, { signal: controller.signal });
+        const latencyMs = Date.now() - startedAt;
+        return {
+            status: (response.ok ? 'up' : 'down'),
+            latencyMs,
+            endpoint: `${url}${healthPath}`
+        };
     }
-  } catch {
-    return {
-      status: 'down' as ServiceStatus,
-      latencyMs: null,
-      endpoint: `${url}${healthPath}`
+    catch {
+        return {
+            status: 'down',
+            latencyMs: null,
+            endpoint: `${url}${healthPath}`
+        };
     }
-  } finally {
-    clearTimeout(timeout)
-  }
+    finally {
+        clearTimeout(timeout);
+    }
 }
-
-async function checkTcpService(host: string, port: number) {
-  const startedAt = Date.now()
-
-  return new Promise<{ status: ServiceStatus; latencyMs: number | null; endpoint: string }>((resolve) => {
-    let settled = false
-    const socket = new net.Socket()
-
-    const done = (status: ServiceStatus, latencyMs: number | null) => {
-      if (settled) {
-        return
-      }
-      settled = true
-      socket.destroy()
-      resolve({ status, latencyMs, endpoint: `tcp://${host}:${port}` })
-    }
-
-    socket.setTimeout(3000)
-    socket.once('connect', () => done('up', Date.now() - startedAt))
-    socket.once('timeout', () => done('down', null))
-    socket.once('error', () => done('down', null))
-    socket.connect(port, host)
-  })
+async function checkTcpService(host, port) {
+    const startedAt = Date.now();
+    return new Promise((resolve) => {
+        let settled = false;
+        const socket = new node_net_1.default.Socket();
+        const done = (status, latencyMs) => {
+            if (settled) {
+                return;
+            }
+            settled = true;
+            socket.destroy();
+            resolve({ status, latencyMs, endpoint: `tcp://${host}:${port}` });
+        };
+        socket.setTimeout(3000);
+        socket.once('connect', () => done('up', Date.now() - startedAt));
+        socket.once('timeout', () => done('down', null));
+        socket.once('error', () => done('down', null));
+        socket.connect(port, host);
+    });
 }
-
 function architectureHtml() {
-  return `<!doctype html>
+    return `<!doctype html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -644,128 +616,111 @@ function architectureHtml() {
     })()
   </script>
 </body>
-</html>`
+</html>`;
 }
-
 // Middleware de sécurité et logging
-app.use(helmet())
-app.use(cors())
-app.use(morgan('combined'))
-app.use(express.json())
-
+app.use((0, helmet_1.default)());
+app.use((0, cors_1.default)());
+app.use((0, morgan_1.default)('combined'));
+app.use(express_1.default.json());
 // Route de santé (health check)
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() })
-})
-
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 app.get('/api/architecture/topology', (req, res) => {
-  res.json({
-    generatedAt: new Date().toISOString(),
-    services: architectureServices,
-    links: architectureLinks
-  })
-})
-
+    res.json({
+        generatedAt: new Date().toISOString(),
+        services: architectureServices,
+        links: architectureLinks
+    });
+});
 app.get('/api/architecture/status', async (req, res) => {
-  const services = await Promise.all(
-    architectureServices.map(async (service) => {
-      if (service.healthMode === 'http' && service.healthPath) {
-        const health = await checkHttpService(service.url, service.healthPath)
-        return {
-          ...service,
-          ...health
+    const services = await Promise.all(architectureServices.map(async (service) => {
+        if (service.healthMode === 'http' && service.healthPath) {
+            const health = await checkHttpService(service.url, service.healthPath);
+            return {
+                ...service,
+                ...health
+            };
         }
-      }
-
-      if (service.healthMode === 'tcp' && service.host && service.port) {
-        const health = await checkTcpService(service.host, service.port)
-        return {
-          ...service,
-          ...health
+        if (service.healthMode === 'tcp' && service.host && service.port) {
+            const health = await checkTcpService(service.host, service.port);
+            return {
+                ...service,
+                ...health
+            };
         }
-      }
-
-      if (service.healthMode === 'none') {
-        return {
-          ...service,
-          status: 'unknown',
-          latencyMs: null,
-          endpoint: null
+        if (service.healthMode === 'none') {
+            return {
+                ...service,
+                status: 'unknown',
+                latencyMs: null,
+                endpoint: null
+            };
         }
-      }
-
-      return {
-        ...service,
-        status: 'unknown',
-        latencyMs: null,
-        endpoint: null
-      }
-    })
-  )
-
-  res.json({
-    checkedAt: new Date().toISOString(),
-    services
-  })
-})
-
+        return {
+            ...service,
+            status: 'unknown',
+            latencyMs: null,
+            endpoint: null
+        };
+    }));
+    res.json({
+        checkedAt: new Date().toISOString(),
+        services
+    });
+});
 app.get('/architecture', (req, res) => {
-  res.setHeader('Content-Type', 'text/html; charset=utf-8')
-  res.send(architectureHtml())
-})
-
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(architectureHtml());
+});
 app.get('/', (req, res) => {
-  res.setHeader('Content-Type', 'text/html; charset=utf-8')
-  res.send(architectureHtml())
-})
-
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(architectureHtml());
+});
 // 🔓 Middleware conditionnel pour exclure le login et le register de la vérification JWT
-const userAuthWrapper = (req: any, res: any, next: any) => {
-  if (req.path === '/login' || req.path === '/register') {
-    return next()
-  }
-  return authMiddleware(req, res, next)
-}
-
+const userAuthWrapper = (req, res, next) => {
+    if (req.path === '/login' || req.path === '/register') {
+        return next();
+    }
+    return (0, auth_1.authMiddleware)(req, res, next);
+};
 // Proxy vers User Service (port 8001)
-app.use('/api/users', userAuthWrapper, createProxyMiddleware({
-  target: USER_SERVICE_URL,
-  changeOrigin: true,
-  pathRewrite: { '^/api/users': '' },
-  on: {
-    proxyReq: fixRequestBody, // 🎯 AJOUT : pour éviter le timeout sur les POST (Login/Register)
-    error: (err, req, res: any) => {
-      res.status(503).json({ error: 'User service indisponible' })
+app.use('/api/users', userAuthWrapper, (0, http_proxy_middleware_1.createProxyMiddleware)({
+    target: USER_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/api/users': '' },
+    on: {
+        proxyReq: http_proxy_middleware_1.fixRequestBody, // 🎯 AJOUT : pour éviter le timeout sur les POST (Login/Register)
+        error: (err, req, res) => {
+            res.status(503).json({ error: 'User service indisponible' });
+        }
     }
-  }
-}))
-
+}));
 // Proxy vers Product Service (port 8002)
-app.use('/api/products', createProxyMiddleware({
-  target: PRODUCT_SERVICE_URL,
-  changeOrigin: true,
-  pathRewrite: { '^/api/products': '' },
-  on: {
-    proxyReq: fixRequestBody, // 🎯 AJOUT : au cas où tu crées un produit en POST plus tard
-    error: (err, req, res: any) => {
-      res.status(503).json({ error: 'Product service indisponible' })
+app.use('/api/products', (0, http_proxy_middleware_1.createProxyMiddleware)({
+    target: PRODUCT_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: { '^/api/products': '' },
+    on: {
+        proxyReq: http_proxy_middleware_1.fixRequestBody, // 🎯 AJOUT : au cas où tu crées un produit en POST plus tard
+        error: (err, req, res) => {
+            res.status(503).json({ error: 'Product service indisponible' });
+        }
     }
-  }
-}))
-
+}));
 // Proxy vers Order Service (port 8003)
-app.use('/api/orders', authMiddleware, createProxyMiddleware({
-  target: ORDER_SERVICE_URL,
-  changeOrigin: true,
-  pathRewrite: (path: string) => path === '/' ? '/orders' : `/orders${path}`,
-  on: {
-    proxyReq: fixRequestBody, // 🎯 LA CORRECTION : Ré-injecte le body consommé par Express pour Spring Boot
-    error: (err, req, res: any) => {
-      res.status(503).json({ error: 'Order service indisponible' })
+app.use('/api/orders', auth_1.authMiddleware, (0, http_proxy_middleware_1.createProxyMiddleware)({
+    target: ORDER_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: (path) => path === '/' ? '/orders' : `/orders${path}`,
+    on: {
+        proxyReq: http_proxy_middleware_1.fixRequestBody, // 🎯 LA CORRECTION : Ré-injecte le body consommé par Express pour Spring Boot
+        error: (err, req, res) => {
+            res.status(503).json({ error: 'Order service indisponible' });
+        }
     }
-  }
-}))
-
+}));
 app.listen(PORT, () => {
-  console.log(`🚀 API Gateway démarré sur le port ${PORT}`)
-})
+    console.log(`🚀 API Gateway démarré sur le port ${PORT}`);
+});
