@@ -13,6 +13,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o product-service main.go
 FROM alpine:3.19
 
 WORKDIR /app
+RUN apk add --no-cache wget
 COPY --from=builder /app/product-service .
 
 EXPOSE 8002
