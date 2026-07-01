@@ -13,6 +13,10 @@ app = FastAPI(title="User Service", version="1.0.0")
 def health():
     return {"status": "ok"}
 
+@app.head("/health", status_code=200)
+def health_head():
+    return
+
 @app.post("/register", response_model=UserResponse, status_code=201)
 def register(payload: UserCreate, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == payload.email).first():
