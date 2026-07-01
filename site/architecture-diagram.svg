@@ -1,0 +1,109 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 30px 'Segoe UI', Tahoma, sans-serif; fill: #1F2A44; }
+      .subtitle { font: 500 16px 'Segoe UI', Tahoma, sans-serif; fill: #4D5B7A; }
+      .lane-title { font: 700 18px 'Segoe UI', Tahoma, sans-serif; fill: #1E3158; }
+      .card-title { font: 700 16px 'Segoe UI', Tahoma, sans-serif; fill: #163056; }
+      .card-sub { font: 500 13px 'Segoe UI', Tahoma, sans-serif; fill: #3F5578; }
+      .small { font: 500 12px 'Segoe UI', Tahoma, sans-serif; fill: #5B6E8F; }
+      .db-title { font: 700 14px 'Segoe UI', Tahoma, sans-serif; fill: #234466; }
+    </style>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,11 L10,5.5 z" fill="#4D6F96" />
+    </marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EEF6FF"/>
+      <stop offset="1" stop-color="#F9FCFF"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="760" fill="url(#bg)"/>
+
+  <text x="32" y="44" class="title">Architecture de ton site web microservices</text>
+  <text x="32" y="70" class="subtitle">Mode actuel: 3 services polyglottes + 3 bases PostgreSQL + site/gateway Nginx</text>
+
+  <rect x="24" y="92" width="1232" height="640" rx="16" fill="#FFFFFF" stroke="#8DB9E1" stroke-width="2" stroke-dasharray="7 6"/>
+
+  <!-- Lanes -->
+  <rect x="44" y="118" width="220" height="584" rx="14" fill="#F3FBF1" stroke="#9BC99C"/>
+  <rect x="284" y="118" width="250" height="584" rx="14" fill="#FFF6F3" stroke="#E0AFA2"/>
+  <rect x="554" y="118" width="440" height="584" rx="14" fill="#F5FAFF" stroke="#A8C7E7"/>
+  <rect x="1014" y="118" width="222" height="584" rx="14" fill="#FFF9EE" stroke="#E3C27A"/>
+
+  <text x="62" y="146" class="lane-title">Client Apps</text>
+  <text x="302" y="146" class="lane-title">Site + API Gateway</text>
+  <text x="572" y="146" class="lane-title">Microservices</text>
+  <text x="1032" y="146" class="lane-title">Databases</text>
+
+  <!-- Client -->
+  <rect x="62" y="180" width="184" height="95" rx="12" fill="#DFF3DF" stroke="#7FB483"/>
+  <text x="78" y="212" class="card-title">Browser / Mobile</text>
+  <text x="78" y="236" class="card-sub">Frontend consumer</text>
+  <text x="78" y="255" class="small">Calls http://localhost:8080</text>
+
+  <!-- Site + Gateway -->
+  <rect x="304" y="180" width="210" height="122" rx="12" fill="#FCE6E0" stroke="#C68B7C"/>
+  <text x="320" y="212" class="card-title">site container (Nginx)</text>
+  <text x="320" y="236" class="card-sub">Static UI + Reverse proxy</text>
+  <text x="320" y="256" class="small">/api/users   -> user-service:8001</text>
+  <text x="320" y="274" class="small">/api/products-> product-service:8002</text>
+  <text x="320" y="292" class="small">/api/orders  -> order-service:8003</text>
+
+  <!-- Services -->
+  <rect x="578" y="176" width="390" height="145" rx="12" fill="#EAF5FF" stroke="#8AB5DF"/>
+  <text x="596" y="208" class="card-title">user-service (Python + FastAPI)</text>
+  <text x="596" y="232" class="card-sub">Endpoints: /health, /users, /users/:id</text>
+  <text x="596" y="252" class="small">Persistance users dans users_db</text>
+  <rect x="596" y="266" width="144" height="38" rx="8" fill="#F2F8FF" stroke="#9CC0E0"/>
+  <text x="608" y="289" class="db-title">users_db</text>
+
+  <rect x="578" y="342" width="390" height="145" rx="12" fill="#EAF5FF" stroke="#8AB5DF"/>
+  <text x="596" y="374" class="card-title">product-service (Go + Gin)</text>
+  <text x="596" y="398" class="card-sub">Endpoints: /health, /products, /products/:id</text>
+  <text x="596" y="418" class="small">Persistance produits dans products_db</text>
+  <rect x="596" y="432" width="144" height="38" rx="8" fill="#F2F8FF" stroke="#9CC0E0"/>
+  <text x="604" y="455" class="db-title">products_db</text>
+
+  <rect x="578" y="508" width="390" height="166" rx="12" fill="#EAF5FF" stroke="#8AB5DF"/>
+  <text x="596" y="540" class="card-title">order-service (Node + Express)</text>
+  <text x="596" y="564" class="card-sub">Endpoints: /health, /orders, /orders/:id</text>
+  <text x="596" y="584" class="small">Valide user et produit avant creation</text>
+  <text x="596" y="602" class="small">Persistance commandes dans orders_db</text>
+  <rect x="596" y="618" width="144" height="38" rx="8" fill="#F2F8FF" stroke="#9CC0E0"/>
+  <text x="608" y="641" class="db-title">orders_db</text>
+
+  <!-- DB lane -->
+  <rect x="1038" y="184" width="176" height="92" rx="12" fill="#ECF7FF" stroke="#8EB7D8"/>
+  <text x="1061" y="218" class="card-title">db-users</text>
+  <text x="1061" y="240" class="card-sub">PostgreSQL</text>
+
+  <rect x="1038" y="314" width="176" height="92" rx="12" fill="#ECF7FF" stroke="#8EB7D8"/>
+  <text x="1052" y="348" class="card-title">db-products</text>
+  <text x="1061" y="370" class="card-sub">PostgreSQL</text>
+
+  <rect x="1038" y="444" width="176" height="92" rx="12" fill="#ECF7FF" stroke="#8EB7D8"/>
+  <text x="1068" y="478" class="card-title">db-orders</text>
+  <text x="1061" y="500" class="card-sub">PostgreSQL</text>
+
+  <rect x="1038" y="568" width="176" height="106" rx="50" fill="#FFE6B8" stroke="#D09C46" stroke-width="2"/>
+  <text x="1088" y="619" class="card-title">RabbitMQ</text>
+  <text x="1070" y="641" class="card-sub">Optionnel / futur</text>
+
+  <!-- Arrows -->
+  <line x1="246" y1="226" x2="304" y2="226" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="514" y1="214" x2="578" y2="214" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="514" y1="241" x2="578" y2="399" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="514" y1="266" x2="578" y2="560" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="968" y1="548" x2="968" y2="414" stroke="#6E88A6" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="968" y1="560" x2="968" y2="247" stroke="#6E88A6" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="740" y1="286" x2="1038" y2="230" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="740" y1="451" x2="1038" y2="360" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="740" y1="637" x2="1038" y2="490" stroke="#4D6F96" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Footer notes -->
+  <text x="32" y="747" class="small">Docker Compose orchestre tous les conteneurs dans un reseau interne unique.</text>
+</svg>

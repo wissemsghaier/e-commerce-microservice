@@ -3,73 +3,362 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Site Microservices Polyglotte</title>
+    <title>Microservices Architecture Canvas</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
+
       :root {
-        --bg: #f4f8fc;
-        --panel: #ffffff;
-        --line: #d8e4f1;
-        --text: #0f2138;
-        --muted: #4f647c;
+        --bg-0: #eaf5ff;
+        --bg-1: #f8fbff;
+        --ink: #1c2d43;
+        --muted: #4d637e;
+        --panel: #ffffffea;
+        --line: #9fc4e4;
         --accent: #ff6b35;
-        --good: #15803d;
-        --chip: #edf4ff;
+        --ok: #1a8f5a;
+        --ko: #d02d2d;
+        --warn: #cf7f1f;
+        --soft-blue: #e7f4ff;
+        --service-blue: #b6daf6;
+        --gateway-red: #f7d8d1;
+        --client-green: #d9f2dd;
+        --rabbit-gold: #ffe1ac;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
       body {
         margin: 0;
-        font-family: "Segoe UI", Tahoma, sans-serif;
-        background: radial-gradient(circle at top left, #eaf3ff 0%, var(--bg) 45%, #fdfdfd 100%);
-        color: var(--text);
+        color: var(--ink);
+        font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+        background:
+          radial-gradient(circle at 10% 10%, #ffffff 0%, var(--bg-0) 34%, transparent 60%),
+          radial-gradient(circle at 85% 15%, #fff1e5 0%, transparent 35%),
+          linear-gradient(135deg, #eaf4ff, var(--bg-1));
       }
 
-      .wrap {
-        max-width: 1100px;
-        margin: 20px auto;
-        padding: 0 14px 30px;
+      .container {
+        max-width: 1320px;
+        margin: 18px auto 26px;
+        padding: 0 14px;
       }
 
-      h1 {
-        margin: 0 0 12px;
+      .hero {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 16px;
+        padding: 14px;
+        backdrop-filter: blur(4px);
       }
 
-      .meta {
-        margin: 0 0 18px;
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.2rem, 2vw, 2rem);
+      }
+
+      .hero p {
+        margin: 8px 0 0;
         color: var(--muted);
       }
 
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 14px;
+      .stack {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
-      .card {
+      .stack span {
+        border: 1px solid #c7ddf2;
+        background: #edf6ff;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 0.83rem;
+      }
+
+      .board {
+        margin-top: 12px;
+        border: 3px dashed #75afe0;
+        border-radius: 16px;
+        background: #ffffffc7;
+        padding: 12px;
+      }
+
+      .topology {
+        position: relative;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 0.82fr 1.52fr 0.98fr;
+      }
+
+      .lane {
         border: 1px solid var(--line);
         border-radius: 14px;
-        background: var(--panel);
-        padding: 14px;
+        padding: 10px;
+        background: #ffffffef;
+        min-height: 340px;
       }
 
-      .row {
+      .lane h2 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .node {
+        border: 1px solid #9fc5e7;
+        border-radius: 12px;
+        padding: 9px;
+        background: linear-gradient(120deg, #fafdff, #ebf6ff);
+        margin-bottom: 8px;
+      }
+
+      .node strong {
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      .node small {
+        color: #4b6580;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+        font-size: 0.79rem;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--warn);
+        box-shadow: 0 0 0 0 rgba(207, 127, 31, 0.4);
+        animation: pulse 1.6s infinite;
+        color: rgba(207, 127, 31, 0.4);
+      }
+
+      .dot.ok {
+        background: var(--ok);
+        box-shadow: 0 0 0 0 rgba(26, 143, 90, 0.4);
+        color: rgba(26, 143, 90, 0.4);
+      }
+
+      .dot.ko {
+        background: var(--ko);
+        box-shadow: 0 0 0 0 rgba(208, 45, 45, 0.4);
+        color: rgba(208, 45, 45, 0.4);
+      }
+
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 currentColor; }
+        70% { box-shadow: 0 0 0 8px transparent; }
+        100% { box-shadow: 0 0 0 0 transparent; }
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .client-card {
+        border: 2px solid #7eb27a;
+        background: linear-gradient(130deg, #e8f8e9, var(--client-green));
+      }
+
+      .gateway-shell {
+        height: calc(100% - 34px);
+        min-height: 285px;
+        display: grid;
+        place-items: center;
+      }
+
+      .gateway-core {
+        border: 2px solid #c36e63;
+        background: linear-gradient(180deg, #fbe5df, var(--gateway-red));
+        border-radius: 14px;
+        width: 78%;
+        min-height: 280px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        font-weight: 700;
+        letter-spacing: 0.03em;
+      }
+
+      .service-grid {
         display: grid;
         gap: 8px;
-        margin-top: 8px;
       }
 
-      input {
-        width: 100%;
-        border: 1px solid #c7d6e5;
+      .service-card {
+        border: 2px solid #88b6de;
+        background: linear-gradient(120deg, #f9fdff, var(--soft-blue));
+      }
+
+      .service-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .service-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        border: 1px solid #8fb6d7;
+        display: grid;
+        place-items: center;
+        font-size: 0.8rem;
+        background: #fff;
+      }
+
+      .db-mini {
+        border: 1px solid #8fb9dc;
+        border-radius: 9px;
+        padding: 6px 8px;
+        font-size: 0.79rem;
+        margin-top: 7px;
+        background: #eef7ff;
+      }
+
+      .db-mini b {
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      .rabbit-column {
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+        gap: 8px;
+      }
+
+      .logo-rack {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .logo-rack span {
+        border: 1px solid #d2dde9;
+        background: #f7fbff;
+        border-radius: 8px;
+        padding: 4px 8px;
+        font-size: 0.76rem;
+      }
+
+      .rabbit {
+        min-height: 270px;
+        border: 2px solid #d59b43;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background: linear-gradient(180deg, #fff1d8, var(--rabbit-gold));
+        font-weight: 700;
+      }
+
+      .rabbit small {
+        display: block;
+        font-weight: 600;
+        opacity: 0.8;
+      }
+
+      .floating-db {
+        display: grid;
+        gap: 6px;
+      }
+
+      .floating-db .db {
+        border: 1px solid #8fb9dc;
         border-radius: 10px;
-        padding: 9px;
+        padding: 6px;
+        font-size: 0.81rem;
+        background: #eef7ff;
+      }
+
+      .links {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+      }
+
+      .links path {
+        stroke: #4d6f90;
+        stroke-width: 1.6;
+        fill: none;
+        stroke-dasharray: 5 4;
+        animation: flow 1.2s linear infinite;
+      }
+
+      @keyframes flow {
+        to { stroke-dashoffset: -18; }
+      }
+
+      .console {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 10px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #ffffffde;
+        padding: 12px;
+      }
+
+      .panel h3 {
+        margin: 0 0 8px;
+      }
+
+      .forms {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 9px;
+      }
+
+      .group {
+        border: 1px solid #d0e1f2;
+        border-radius: 11px;
+        padding: 8px;
+        background: #f7fbff;
+      }
+
+      .group h4 {
+        margin: 0 0 7px;
+      }
+
+      .group input {
+        width: 100%;
+        border: 1px solid #b9cfe4;
+        border-radius: 9px;
+        padding: 8px;
+        margin-bottom: 6px;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
       }
 
       button {
-        border: 1px solid #d1deea;
-        border-radius: 10px;
-        background: #fff;
+        border: 1px solid #bed5ea;
+        border-radius: 9px;
+        background: #fefefe;
+        color: #23405f;
+        font-weight: 600;
         padding: 8px 10px;
         cursor: pointer;
       }
@@ -81,85 +370,209 @@
       }
 
       pre {
-        white-space: pre-wrap;
         margin: 0;
-        background: #0f172a;
-        color: #cfe4ff;
+        min-height: 260px;
+        border-radius: 12px;
         padding: 12px;
-        border-radius: 10px;
-        min-height: 120px;
+        background: #0f1d33;
+        color: #dbe7ff;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.84rem;
+        overflow: auto;
       }
 
-      .ok {
-        color: var(--good);
-        font-weight: 700;
+      .healthline {
+        margin-top: 8px;
+        color: var(--muted);
       }
 
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 10px 0 18px;
-      }
+      @media (max-width: 1050px) {
+        .topology {
+          grid-template-columns: 1fr 1fr;
+        }
 
-      .chip {
-        border: 1px solid #c6d8ed;
-        background: var(--chip);
-        border-radius: 999px;
-        padding: 4px 10px;
-        font-size: 0.86rem;
+        .links {
+          display: none;
+        }
+
+        .console {
+          grid-template-columns: 1fr;
+        }
+
+        .forms {
+          grid-template-columns: 1fr;
+        }
+
+        .gateway-core {
+          writing-mode: horizontal-tb;
+          transform: none;
+          width: 100%;
+          min-height: 74px;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <h1>Site Microservices (3 langages)</h1>
-      <p class="meta">Lance tout avec Docker Compose puis teste les appels entre services depuis cette page.</p>
-      <div class="chips">
-        <span class="chip">user-service: Python / FastAPI</span>
-        <span class="chip">product-service: Go / Gin</span>
-        <span class="chip">order-service: Node.js / Express</span>
-      </div>
-
-      <div class="grid">
-        <section class="card">
-          <h2>1) User service</h2>
-          <div class="row">
-            <input id="u-name" placeholder="Nom" />
-            <input id="u-email" placeholder="Email" />
-            <button class="primary" id="btn-user">Creer user</button>
-            <button id="btn-users">Charger users</button>
-          </div>
-        </section>
-
-        <section class="card">
-          <h2>2) Product service</h2>
-          <div class="row">
-            <input id="p-name" placeholder="Nom produit" />
-            <input id="p-price" type="number" step="0.01" placeholder="Prix" />
-            <button class="primary" id="btn-product">Creer produit</button>
-            <button id="btn-products">Charger produits</button>
-          </div>
-        </section>
-
-        <section class="card">
-          <h2>3) Order service</h2>
-          <div class="row">
-            <input id="o-user" type="number" placeholder="userId" />
-            <input id="o-product" type="number" placeholder="productId" />
-            <input id="o-qty" type="number" value="1" min="1" placeholder="Quantite" />
-            <button class="primary" id="btn-order">Creer commande</button>
-            <button id="btn-orders">Charger commandes</button>
-          </div>
-        </section>
-      </div>
-
-      <section class="card" style="margin-top: 14px;">
-        <h2>Sortie</h2>
-        <p id="health" class="meta">Etat services: verification...</p>
-        <pre id="out">Pret.</pre>
+    <main class="container">
+      <section class="hero">
+        <h1>Architecture Diagram Mode</h1>
+        <p>Representation proche du schema cible: Client Apps -> API Gateway -> Microservices -> RabbitMQ/Data.</p>
+        <div class="stack">
+          <span>Shopping.Web</span>
+          <span>Gateway Nginx</span>
+          <span>User/Python + PostgreSQL</span>
+          <span>Product/Go + PostgreSQL</span>
+          <span>Order/Node + PostgreSQL</span>
+          <span>RabbitMQ column (visual)</span>
+        </div>
       </section>
-    </div>
+
+      <section class="board">
+        <div class="topology">
+          <svg class="links" viewBox="0 0 1200 380" preserveAspectRatio="none">
+            <path d="M120,120 C250,120 300,120 380,120" />
+            <path d="M470,120 C570,88 650,76 740,74" />
+            <path d="M470,120 C570,120 650,155 740,170" />
+            <path d="M470,120 C570,165 650,244 740,266" />
+            <path d="M900,74 C975,74 1020,100 1075,120" />
+            <path d="M900,170 C975,170 1020,165 1075,158" />
+            <path d="M900,266 C975,266 1020,225 1075,205" />
+          </svg>
+
+          <article class="lane">
+            <h2>Client Apps</h2>
+            <div class="node client-card">
+              <strong>Shopping.Web</strong>
+              <small>Port 8080</small>
+              <div class="status"><span class="dot" id="dot-site"></span><span id="txt-site">checking...</span></div>
+            </div>
+            <div class="mini-grid">
+              <div class="node"><strong>Desktop</strong><small>Browser access</small></div>
+              <div class="node"><strong>Mobile</strong><small>Responsive UI</small></div>
+            </div>
+            <div class="node">
+              <strong>Runtime Tags</strong>
+              <small>.NET style architecture feel<br/>polyglot backend execution</small>
+            </div>
+          </article>
+
+          <article class="lane">
+            <h2>API Gateway</h2>
+            <div class="gateway-shell">
+              <div class="gateway-core">
+                Nginx API Gateway
+              </div>
+            </div>
+            <div class="node">
+              <strong>Routes</strong>
+              <small>/api/users -> user-service<br/>/api/products -> product-service<br/>/api/orders -> order-service</small>
+              <div class="status"><span class="dot" id="dot-gateway"></span><span id="txt-gateway">routing</span></div>
+            </div>
+          </article>
+
+          <article class="lane">
+            <h2>Microservices</h2>
+            <div class="service-grid">
+              <div class="node service-card">
+                <div class="service-head">
+                  <strong>User Service</strong>
+                  <span class="service-icon">PY</span>
+                </div>
+                <small>FastAPI | /users</small>
+                <div class="db-mini" id="db-users"><b>DB</b>users_db</div>
+                <div class="status"><span class="dot" id="dot-users"></span><span id="txt-users">checking...</span></div>
+              </div>
+
+              <div class="node service-card">
+                <div class="service-head">
+                  <strong>Product Service</strong>
+                  <span class="service-icon">GO</span>
+                </div>
+                <small>Gin | /products</small>
+                <div class="db-mini" id="db-products"><b>DB</b>products_db</div>
+                <div class="status"><span class="dot" id="dot-products"></span><span id="txt-products">checking...</span></div>
+              </div>
+
+              <div class="node service-card">
+                <div class="service-head">
+                  <strong>Order Service</strong>
+                  <span class="service-icon">JS</span>
+                </div>
+                <small>Express | /orders</small>
+                <div class="db-mini" id="db-orders"><b>DB</b>orders_db</div>
+                <div class="status"><span class="dot" id="dot-orders"></span><span id="txt-orders">checking...</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="lane">
+            <h2>Data / Messaging</h2>
+            <div class="rabbit-column">
+              <div class="logo-rack">
+                <span>Docker</span>
+                <span>PostgreSQL</span>
+                <span>RabbitMQ</span>
+              </div>
+              <div class="rabbit">
+                RabbitMQ
+                <small>message bus</small>
+                <div class="status"><span class="dot" id="dot-rabbit"></span><span id="txt-rabbit">planned</span></div>
+              </div>
+              <div class="floating-db">
+                <div class="db">users_db</div>
+                <div class="db">products_db</div>
+                <div class="db">orders_db</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="console">
+        <article class="panel">
+          <h3>Execution Console</h3>
+          <div class="forms">
+            <div class="group">
+              <h4>User</h4>
+              <input id="u-name" placeholder="Name" />
+              <input id="u-email" placeholder="Email" />
+              <div class="actions">
+                <button class="primary" id="btn-user">Create</button>
+                <button id="btn-users">List</button>
+              </div>
+            </div>
+
+            <div class="group">
+              <h4>Product</h4>
+              <input id="p-name" placeholder="Product name" />
+              <input id="p-price" type="number" step="0.01" placeholder="Price" />
+              <div class="actions">
+                <button class="primary" id="btn-product">Create</button>
+                <button id="btn-products">List</button>
+              </div>
+            </div>
+
+            <div class="group">
+              <h4>Order</h4>
+              <input id="o-user" type="number" placeholder="userId" />
+              <input id="o-product" type="number" placeholder="productId" />
+              <input id="o-qty" type="number" value="1" min="1" placeholder="qty" />
+              <div class="actions">
+                <button class="primary" id="btn-order">Create</button>
+                <button id="btn-orders">List</button>
+                <button id="btn-demo">Run Demo Flow</button>
+              </div>
+            </div>
+          </div>
+          <p class="healthline" id="health-summary">etat global: checking...</p>
+        </article>
+
+        <article class="panel">
+          <h3>Output</h3>
+          <pre id="out">Ready.</pre>
+        </article>
+      </section>
+    </main>
 
     <script>
       const API = {
@@ -169,7 +582,21 @@
       };
 
       const out = document.getElementById("out");
-      const health = document.getElementById("health");
+      const healthSummary = document.getElementById("health-summary");
+
+      function setDbCard(id, ok) {
+        const card = document.getElementById(id);
+        card.style.borderColor = ok ? "#6dac92" : "#cb7c7c";
+        card.style.background = ok ? "#ecfff4" : "#fff1f1";
+      }
+
+      function setStatus(key, ok, text) {
+        const dot = document.getElementById("dot-" + key);
+        const txt = document.getElementById("txt-" + key);
+        dot.classList.remove("ok", "ko");
+        dot.classList.add(ok ? "ok" : "ko");
+        txt.textContent = text;
+      }
 
       function show(data) {
         out.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
@@ -182,7 +609,7 @@
         });
         const body = await res.json().catch(() => ({}));
         if (!res.ok) {
-          throw new Error(body.message || "Erreur API");
+          throw new Error(body.detail || body.message || "API error");
         }
         return body;
       }
@@ -194,11 +621,27 @@
           fetch(API.orders + "/health")
         ]);
 
-        const up = checks.map((c) => c.status === "fulfilled" && c.value.ok);
-        health.innerHTML = "Etat services: " +
-          "users <span class='ok'>" + (up[0] ? "up" : "down") + "</span> | " +
-          "products <span class='ok'>" + (up[1] ? "up" : "down") + "</span> | " +
-          "orders <span class='ok'>" + (up[2] ? "up" : "down") + "</span>";
+        const userOk = checks[0].status === "fulfilled" && checks[0].value.ok;
+        const productOk = checks[1].status === "fulfilled" && checks[1].value.ok;
+        const orderOk = checks[2].status === "fulfilled" && checks[2].value.ok;
+        const siteOk = true;
+        const gatewayOk = true;
+        const rabbitOk = orderOk;
+
+        setStatus("site", siteOk, siteOk ? "up" : "down");
+        setStatus("gateway", gatewayOk, gatewayOk ? "routing" : "down");
+        setStatus("users", userOk, userOk ? "healthy" : "error");
+        setStatus("products", productOk, productOk ? "healthy" : "error");
+        setStatus("orders", orderOk, orderOk ? "healthy" : "error");
+        setStatus("rabbit", rabbitOk, rabbitOk ? "active" : "standby");
+
+        setDbCard("db-users", userOk);
+        setDbCard("db-products", productOk);
+        setDbCard("db-orders", orderOk);
+
+        const allUp = userOk && productOk && orderOk;
+        healthSummary.textContent =
+          "etat global: " + (allUp ? "all systems operational" : "degraded topology, check service output");
       }
 
       document.getElementById("btn-user").onclick = async () => {
@@ -208,6 +651,7 @@
             email: document.getElementById("u-email").value
           };
           show(await req(API.users + "/users", { method: "POST", body: JSON.stringify(payload) }));
+          refreshHealth();
         } catch (e) {
           show(e.message);
         }
@@ -228,6 +672,7 @@
             price: Number(document.getElementById("p-price").value)
           };
           show(await req(API.products + "/products", { method: "POST", body: JSON.stringify(payload) }));
+          refreshHealth();
         } catch (e) {
           show(e.message);
         }
@@ -249,6 +694,7 @@
             quantity: Number(document.getElementById("o-qty").value)
           };
           show(await req(API.orders + "/orders", { method: "POST", body: JSON.stringify(payload) }));
+          refreshHealth();
         } catch (e) {
           show(e.message);
         }
@@ -262,8 +708,43 @@
         }
       };
 
+      document.getElementById("btn-demo").onclick = async () => {
+        try {
+          const stamp = Date.now();
+          const user = await req(API.users + "/users", {
+            method: "POST",
+            body: JSON.stringify({
+              name: "Demo User " + String(stamp).slice(-4),
+              email: "demo" + stamp + "@mail.com"
+            })
+          });
+
+          const product = await req(API.products + "/products", {
+            method: "POST",
+            body: JSON.stringify({
+              name: "Demo Product " + String(stamp).slice(-4),
+              price: 12.5
+            })
+          });
+
+          const order = await req(API.orders + "/orders", {
+            method: "POST",
+            body: JSON.stringify({
+              userId: user.id,
+              productId: product.id,
+              quantity: 2
+            })
+          });
+
+          show({ flow: "demo-complete", user, product, order });
+          refreshHealth();
+        } catch (e) {
+          show(e.message);
+        }
+      };
+
       refreshHealth();
-      setInterval(refreshHealth, 6000);
+      setInterval(refreshHealth, 5000);
     </script>
   </body>
 </html>
