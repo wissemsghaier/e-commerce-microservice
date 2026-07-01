@@ -6,6 +6,12 @@ Ce projet contient exactement 3 microservices avec des langages differents:
 - product-service: Go + Gin (port 8002)
 - order-service: Node.js + Express (port 8003)
 
+Chaque service a sa base PostgreSQL dediee:
+
+- db-users -> users_db
+- db-products -> products_db
+- db-orders -> orders_db
+
 Un 4e conteneur "site" (Nginx) sert l interface web sur le port 8080 et proxy les appels vers les 3 APIs.
 
 ## Lancer tout ensemble
@@ -13,6 +19,12 @@ Un 4e conteneur "site" (Nginx) sert l interface web sur le port 8080 et proxy le
 ```bash
 docker compose build --no-cache
 docker compose up -d
+```
+
+Pour reinitialiser les donnees PostgreSQL:
+
+```bash
+docker compose down -v
 ```
 
 ## Ouvrir le site

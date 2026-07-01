@@ -3,10 +3,9 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
 COPY go.mod ./
-RUN go mod download
-
 COPY main.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o product-service main.go
+RUN go mod tidy
+RUN CGO_ENABLED=0 GOOS=linux go build -mod=mod -o product-service main.go
 
 FROM alpine:3.20
 
