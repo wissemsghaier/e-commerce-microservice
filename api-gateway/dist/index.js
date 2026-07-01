@@ -163,6 +163,664 @@ async function checkTcpService(host, port) {
         socket.connect(port, host);
     });
 }
+function shopHtml() {
+    return `<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boutique Livraison</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+    :root {
+      --bg-1: #fff4e6;
+      --bg-2: #dff3ff;
+      --ink: #1f2d3d;
+      --primary: #ff6b35;
+      --primary-2: #ff9f6e;
+      --ok: #15784a;
+      --danger: #b5253a;
+      --card: #ffffffd7;
+      --line: #2242602d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: 'Outfit', 'Segoe UI', sans-serif;
+      background:
+        radial-gradient(circle at 88% 8%, #ffd2b6 0, transparent 40%),
+        radial-gradient(circle at 8% 16%, #b6e4ff 0, transparent 36%),
+        linear-gradient(145deg, var(--bg-1), var(--bg-2));
+      padding: 20px;
+    }
+
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .topnav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #ffffffbc;
+      border-radius: 14px;
+      padding: 10px;
+      background: #ffffffc9;
+      box-shadow: 0 10px 24px #17324a1c;
+    }
+
+    .nav-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      color: #3c5877;
+      margin-right: 4px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #2e4864;
+      border: 1px solid #2e486438;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #ffffff;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .nav-link:hover {
+      transform: translateY(-1px);
+      background: #eff7ff;
+    }
+
+    .nav-link.active {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(120deg, var(--primary), var(--primary-2));
+    }
+
+    .hero {
+      border: 1px solid #ffffffa8;
+      border-radius: 24px;
+      padding: 20px;
+      background: linear-gradient(120deg, #ffffffd9 0%, #fff7f0d8 45%, #eef8ffd8 100%);
+      box-shadow: 0 25px 55px #1f2e3f1f;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -70px;
+      top: -90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffd2b8 0, #ffd2b800 70%);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.6rem);
+      letter-spacing: 0.01em;
+    }
+
+    .subtitle {
+      margin: 8px 0 14px;
+      font-size: 1rem;
+      color: #3a4f67;
+      max-width: 720px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid #22426035;
+      background: #ffffffb8;
+      font-size: 0.82rem;
+      padding: 6px 12px;
+      font-weight: 600;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      padding: 14px;
+      box-shadow: 0 12px 28px #12263a17;
+    }
+
+    .panel-title {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      border: 1px solid #22426055;
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: #ffffff;
+      color: #1f2d3d;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #f2f8ff;
+    }
+
+    .btn.primary {
+      background: linear-gradient(120deg, var(--primary), var(--primary-2));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .product {
+      border: 1px solid #2242602e;
+      border-radius: 12px;
+      padding: 10px;
+      background: #ffffffcf;
+      animation: rise .45s ease both;
+    }
+
+    .product h3 {
+      margin: 0 0 5px;
+      font-size: 1rem;
+    }
+
+    .meta {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      color: #40566f;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+    }
+
+    .row input {
+      width: 80px;
+      border-radius: 8px;
+      border: 1px solid #22426044;
+      padding: 4px 6px;
+    }
+
+    .block {
+      border: 1px dashed #22426058;
+      border-radius: 11px;
+      padding: 10px;
+      background: #ffffffb5;
+      margin-bottom: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .step {
+      text-align: center;
+      border: 1px solid #22426045;
+      border-radius: 999px;
+      padding: 5px 6px;
+      font-size: 0.73rem;
+      background: #f5f8fc;
+      color: #45607d;
+      font-weight: 600;
+    }
+
+    .step.done {
+      background: #e8fff3;
+      color: var(--ok);
+      border-color: #15784a44;
+    }
+
+    .step.now {
+      background: #fff2eb;
+      color: #c85226;
+      border-color: #ff6b3566;
+    }
+
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .service {
+      font-size: 0.76rem;
+      border-radius: 999px;
+      border: 1px solid #27435f3a;
+      padding: 4px 9px;
+      background: #f6f9fc;
+    }
+
+    .service.up { color: var(--ok); border-color: #15784a44; background: #ebfff3; }
+    .service.down { color: var(--danger); border-color: #b5253a44; background: #fff2f5; }
+
+    .feed {
+      margin: 0;
+      padding-left: 18px;
+      max-height: 180px;
+      overflow-y: auto;
+      font-size: 0.82rem;
+    }
+
+    .feed li { margin-bottom: 7px; }
+
+    .ok { color: var(--ok); }
+    .ko { color: var(--danger); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .products { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topnav" aria-label="Navigation principale">
+      <span class="nav-tag">Navigation</span>
+      <a class="nav-link active" href="/">Boutique</a>
+      <a class="nav-link" href="/shop">Boutique (alias)</a>
+      <a class="nav-link" href="/architecture">Admin Ops</a>
+      <a class="nav-link" href="/admin">Admin (alias)</a>
+    </nav>
+
+    <section class="hero">
+      <h1>Boutique Livraison Express</h1>
+      <p class="subtitle">Simule un vrai parcours client e-commerce: voir le catalogue, ajouter au panier, passer commande et suivre la livraison en direct.</p>
+      <div class="hero-meta">
+        <span class="chip" id="shop-last-sync">Sync services: -</span>
+        <span class="chip">Mode client: dynamique</span>
+        <a class="chip" href="/architecture" style="text-decoration:none;color:inherit">Ouvrir mode Admin / Architecture</a>
+      </div>
+      <div class="services" id="shop-services"></div>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <h2 class="panel-title">Catalogue Produits</h2>
+        <div class="toolbar">
+          <button class="btn" id="shop-refresh" data-shop-action="1">Rafraichir catalogue</button>
+          <button class="btn" id="shop-orders" data-shop-action="1">Mes commandes</button>
+          <button class="btn primary" id="shop-checkout" data-shop-action="1">Valider livraison</button>
+        </div>
+        <div id="shop-products" class="products"></div>
+      </article>
+
+      <aside class="panel">
+        <h2 class="panel-title">Panier & Livraison</h2>
+        <div id="shop-cart" class="block">Panier vide</div>
+        <div class="toolbar">
+          <button class="btn" id="status-confirmed" data-shop-action="1">CONFIRMED</button>
+          <button class="btn" id="status-shipped" data-shop-action="1">SHIPPED</button>
+          <button class="btn" id="status-delivered" data-shop-action="1">DELIVERED</button>
+        </div>
+        <div id="shop-delivery" class="block">Aucune commande active.</div>
+        <ol id="shop-feed" class="feed"></ol>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+    const shopState = {
+      products: [],
+      cart: [],
+      token: null,
+      user: null,
+      currentOrder: null,
+      busy: false
+    }
+
+    const deliverySteps = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED']
+
+    function s(id) {
+      return document.getElementById(id)
+    }
+
+    function setShopBusy(value) {
+      shopState.busy = value
+      document.querySelectorAll('[data-shop-action]').forEach(btn => {
+        btn.disabled = value
+      })
+    }
+
+    function money(value) {
+      return Number(value || 0).toFixed(2) + ' EUR'
+    }
+
+    function addFeed(ok, label, details) {
+      const item = document.createElement('li')
+      item.className = ok ? 'ok' : 'ko'
+      item.textContent = '[' + new Date().toLocaleTimeString() + '] ' + label + ' | ' + details
+      s('shop-feed').prepend(item)
+    }
+
+    function callApi(url, options) {
+      return fetch(url, options).then(async response => {
+        const raw = await response.text()
+        let payload = raw
+        try {
+          payload = raw ? JSON.parse(raw) : {}
+        } catch {
+          payload = raw
+        }
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status + ' - ' + (typeof payload === 'string' ? payload : JSON.stringify(payload)))
+        }
+        return payload
+      })
+    }
+
+    function renderProducts() {
+      const root = s('shop-products')
+      if (!shopState.products.length) {
+        root.innerHTML = '<div class="meta">Aucun produit. Cree un produit depuis le mode Admin pour commencer.</div>'
+        return
+      }
+
+      root.innerHTML = shopState.products.map(product => {
+        return '<article class="product">' +
+          '<h3>' + product.name + '</h3>' +
+          '<p class="meta">Prix: ' + money(product.price) + ' | Stock: ' + (product.stock || 0) + '</p>' +
+          '<div class="row"><span>Quantite</span><input id="shop-qty-' + product.id + '" type="number" min="1" value="1" /></div>' +
+          '<button class="btn" data-add-product="' + product.id + '">Ajouter au panier</button>' +
+        '</article>'
+      }).join('')
+    }
+
+    function renderCart() {
+      if (!shopState.cart.length) {
+        s('shop-cart').textContent = 'Panier vide'
+        return
+      }
+
+      const lines = shopState.cart.map(item => item.name + ' x' + item.quantity + ' = ' + money(item.quantity * item.price))
+      const total = shopState.cart.reduce((sum, item) => sum + item.quantity * item.price, 0)
+      s('shop-cart').textContent = lines.join('\n') + '\n----------------\nTotal: ' + money(total)
+    }
+
+    function renderDelivery(order) {
+      if (!order) {
+        s('shop-delivery').textContent = 'Aucune commande active.'
+        return
+      }
+
+      const status = order.status || 'PENDING'
+      const idx = deliverySteps.indexOf(status)
+      const badges = deliverySteps.map((step, i) => {
+        let cls = 'step'
+        if (i < idx) {
+          cls += ' done'
+        }
+        if (i === idx) {
+          cls += ' now'
+        }
+        return '<div class="' + cls + '">' + step + '</div>'
+      }).join('')
+
+      s('shop-delivery').innerHTML =
+        '<div><strong>Commande #' + order.id + '</strong></div>' +
+        '<div>Statut: ' + status + '</div>' +
+        '<div class="steps">' + badges + '</div>'
+    }
+
+    function addToCart(productId, quantity) {
+      const product = shopState.products.find(item => Number(item.id) === Number(productId))
+      if (!product) {
+        addFeed(false, 'Panier', 'Produit introuvable')
+        return
+      }
+
+      const qty = Number(quantity) > 0 ? Number(quantity) : 1
+      const existing = shopState.cart.find(item => Number(item.id) === Number(product.id))
+      if (existing) {
+        existing.quantity += qty
+      } else {
+        shopState.cart.push({
+          id: product.id,
+          name: product.name,
+          price: Number(product.price || 0),
+          quantity: qty
+        })
+      }
+
+      renderCart()
+      addFeed(true, 'Panier', 'Produit ajoute')
+    }
+
+    function ensureSession() {
+      if (shopState.token) {
+        return Promise.resolve()
+      }
+
+      const stamp = Date.now()
+      const email = 'shop+' + stamp + '@example.com'
+      const username = 'shop-' + stamp
+      const password = 'Pass1234!'
+
+      return callApi('/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, username, password })
+      })
+        .then(user => {
+          shopState.user = user
+          return callApi('/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          })
+        })
+        .then(token => {
+          shopState.token = token.access_token
+          addFeed(true, 'Session', 'Client connecte automatiquement')
+        })
+    }
+
+    function loadProducts() {
+      return callApi('/api/products/products', { method: 'GET' }).then(payload => {
+        shopState.products = Array.isArray(payload) ? payload : (payload.data || [])
+        renderProducts()
+        addFeed(true, 'Catalogue', 'Produits charges depuis Product Service')
+      })
+    }
+
+    function checkout() {
+      if (!shopState.cart.length) {
+        return Promise.reject(new Error('Panier vide'))
+      }
+
+      return ensureSession().then(() => {
+        const userId = shopState.user && shopState.user.id ? shopState.user.id : 1
+        const payload = {
+          userId,
+          items: shopState.cart.map(item => ({
+            productId: item.id,
+            quantity: item.quantity,
+            unitPrice: item.price
+          }))
+        }
+
+        return callApi('/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + shopState.token
+          },
+          body: JSON.stringify(payload)
+        })
+      }).then(order => {
+        shopState.currentOrder = order
+        shopState.cart = []
+        renderCart()
+        renderDelivery(order)
+        addFeed(true, 'Checkout', 'Commande creee avec evenement livraison')
+      })
+    }
+
+    function loadOrders() {
+      return ensureSession().then(() => {
+        const userId = shopState.user && shopState.user.id ? shopState.user.id : 1
+        return callApi('/api/orders/user/' + userId, {
+          method: 'GET',
+          headers: { Authorization: 'Bearer ' + shopState.token }
+        })
+      }).then(orders => {
+        const list = Array.isArray(orders) ? orders : []
+        if (list.length) {
+          shopState.currentOrder = list[0]
+        }
+        renderDelivery(shopState.currentOrder)
+        addFeed(true, 'Mes commandes', 'Historique charge')
+      })
+    }
+
+    function updateStatus(status) {
+      if (!shopState.currentOrder || !shopState.currentOrder.id) {
+        return Promise.reject(new Error('Aucune commande active'))
+      }
+
+      return ensureSession().then(() => {
+        return callApi('/api/orders/' + shopState.currentOrder.id + '/status?status=' + status, {
+          method: 'PATCH',
+          headers: { Authorization: 'Bearer ' + shopState.token }
+        })
+      }).then(order => {
+        shopState.currentOrder = order
+        renderDelivery(order)
+        addFeed(true, 'Livraison', 'Statut passe a ' + status)
+      })
+    }
+
+    function loadServices() {
+      return fetch('/api/architecture/status').then(response => response.json()).then(payload => {
+        const strips = payload.services || []
+        s('shop-services').innerHTML = strips.map(service => {
+          const cls = service.status === 'down' ? 'service down' : 'service up'
+          const latency = service.latencyMs != null ? ' (' + service.latencyMs + 'ms)' : ''
+          return '<span class="' + cls + '">' + service.name + ': ' + service.status + latency + '</span>'
+        }).join('')
+        s('shop-last-sync').textContent = 'Sync services: ' + new Date(payload.checkedAt).toLocaleTimeString()
+      })
+    }
+
+    function runAction(label, work) {
+      setShopBusy(true)
+      return work().catch(error => {
+        const message = error instanceof Error ? error.message : String(error)
+        addFeed(false, label, message)
+      }).finally(() => {
+        setShopBusy(false)
+      })
+    }
+
+    function bindShop() {
+      s('shop-refresh').addEventListener('click', () => runAction('Catalogue', loadProducts))
+      s('shop-checkout').addEventListener('click', () => runAction('Checkout', checkout))
+      s('shop-orders').addEventListener('click', () => runAction('Mes commandes', loadOrders))
+      s('status-confirmed').addEventListener('click', () => runAction('Status', () => updateStatus('CONFIRMED')))
+      s('status-shipped').addEventListener('click', () => runAction('Status', () => updateStatus('SHIPPED')))
+      s('status-delivered').addEventListener('click', () => runAction('Status', () => updateStatus('DELIVERED')))
+
+      s('shop-products').addEventListener('click', event => {
+        const target = event.target
+        if (!(target instanceof HTMLElement)) {
+          return
+        }
+        const id = target.getAttribute('data-add-product')
+        if (!id) {
+          return
+        }
+        const input = s('shop-qty-' + id)
+        const quantity = input ? Number(input.value) : 1
+        addToCart(Number(id), quantity)
+      })
+    }
+
+    ;(function boot() {
+      bindShop()
+      renderCart()
+      renderDelivery(null)
+      loadProducts().catch(() => {
+        addFeed(false, 'Catalogue', 'Impossible de charger les produits')
+      })
+      loadServices().catch(() => {
+        addFeed(false, 'Services', 'Impossible de lire le statut des services')
+      })
+      setInterval(loadServices, 5000)
+      addFeed(true, 'Boutique', 'Interface client prete')
+    })()
+  </script>
+</body>
+</html>`;
+}
 function architectureHtml() {
     return `<!doctype html>
 <html lang="fr">
@@ -171,15 +829,17 @@ function architectureHtml() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Architecture Microservices</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
     :root {
-      --bg-1: #fff9ef;
-      --bg-2: #e9f7ff;
-      --ink: #1d2430;
-      --card: #ffffffcc;
-      --line: #254062;
+      --bg-1: #f2f8ff;
+      --bg-2: #ecf2ff;
+      --ink: #1c2a3d;
+      --card: #ffffffde;
+      --line: #1f3e63;
       --up: #14784a;
       --down: #b52135;
-      --accent: #ff6b35;
+      --accent: #1f79d1;
     }
 
     * { box-sizing: border-box; }
@@ -187,11 +847,11 @@ function architectureHtml() {
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
       color: var(--ink);
-      background: radial-gradient(circle at 10% 10%, #ffdfb7 0, transparent 45%),
-                  radial-gradient(circle at 90% 20%, #b7e8ff 0, transparent 40%),
-                  linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      background: radial-gradient(circle at 8% 12%, #cce5ff 0, transparent 42%),
+                  radial-gradient(circle at 92% 18%, #d8dcff 0, transparent 38%),
+                  linear-gradient(145deg, var(--bg-1), var(--bg-2));
       padding: 24px;
     }
 
@@ -208,8 +868,54 @@ function architectureHtml() {
 
     h1 {
       margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(1.5rem, 3vw, 2.4rem);
       letter-spacing: 0.02em;
+    }
+
+    .topnav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      border: 1px solid #1f3e6330;
+      border-radius: 13px;
+      padding: 10px;
+      background: #ffffffcd;
+      box-shadow: 0 10px 24px #1b2e4520;
+    }
+
+    .nav-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      color: #2e4a67;
+      margin-right: 4px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #284867;
+      border: 1px solid #2e4a6730;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #f7fbff;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .nav-link:hover {
+      transform: translateY(-1px);
+      background: #eaf4ff;
+    }
+
+    .nav-link.active {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(120deg, #1f79d1, #48a2ef);
     }
 
     .sub {
@@ -482,6 +1188,99 @@ function architectureHtml() {
     .ok { color: #0f6f43; }
     .ko { color: #a42033; }
 
+    .shop {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 14px;
+    }
+
+    .shop-products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .product-card {
+      border: 1px solid #24416133;
+      border-radius: 11px;
+      padding: 10px;
+      background: #ffffffd1;
+    }
+
+    .product-title {
+      margin: 0 0 4px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #1b2d45;
+    }
+
+    .product-meta {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      color: #304862;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+    }
+
+    .qty-row input {
+      width: 74px;
+      border: 1px solid #24416144;
+      border-radius: 8px;
+      padding: 4px 6px;
+    }
+
+    .cart-view {
+      margin-bottom: 10px;
+      min-height: 72px;
+    }
+
+    .delivery-track {
+      margin-top: 8px;
+      border: 1px dashed #25406266;
+      border-radius: 10px;
+      padding: 10px;
+      background: #ffffffa8;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .step {
+      text-align: center;
+      border: 1px solid #28476533;
+      border-radius: 999px;
+      padding: 5px 7px;
+      font-size: 0.73rem;
+      background: #f5f8fc;
+      color: #445e7a;
+    }
+
+    .step.done {
+      background: #e8fff3;
+      border-color: #14784a55;
+      color: #14784a;
+      font-weight: 700;
+    }
+
+    .step.now {
+      background: #fff2eb;
+      border-color: #ff6b3555;
+      color: #c44c1f;
+      font-weight: 700;
+    }
+
     @keyframes rise {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -490,12 +1289,23 @@ function architectureHtml() {
     @media (max-width: 900px) {
       .client, .gateway, .user, .product, .order, .dbu, .dbp, .dbo, .mq { grid-column: 1 / -1; }
       .workbench { grid-template-columns: 1fr; }
+      .shop { grid-template-columns: 1fr; }
       .form-grid { grid-template-columns: 1fr; }
+      .shop-products { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <nav class="topnav" aria-label="Navigation principale">
+      <span class="nav-tag">Navigation</span>
+      <a class="nav-link" href="/">Boutique</a>
+      <a class="nav-link" href="/shop">Boutique (alias)</a>
+      <a class="nav-link active" href="/architecture">Admin Ops</a>
+      <a class="nav-link" href="/admin">Admin (alias)</a>
+    </nav>
+
     <h1>Vue d'integration des microservices</h1>
     <p class="sub">Cette interface montre la communication entre services, les dependances et le statut en direct.</p>
 
@@ -697,6 +1507,30 @@ function architectureHtml() {
         <ol id="timeline" class="timeline"></ol>
       </div>
     </section>
+
+    <section class="shop">
+      <div class="panel">
+        <h2>Mode client e-commerce livraison</h2>
+        <p class="small">Visualise comme un vrai site: catalogue, panier, commande et livraison.</p>
+        <div class="actions">
+          <button id="btn-load-products" class="btn">Charger catalogue</button>
+          <button id="btn-checkout" class="btn primary">Commander (livraison)</button>
+          <button id="btn-my-orders" class="btn">Mes commandes</button>
+        </div>
+        <div id="shop-products" class="shop-products"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Panier et suivi livraison</h2>
+        <div id="cart-view" class="output-box cart-view">Panier vide</div>
+        <div class="actions">
+          <button id="btn-status-confirmed" class="btn">CONFIRMED</button>
+          <button id="btn-status-shipped" class="btn">SHIPPED</button>
+          <button id="btn-status-delivered" class="btn">DELIVERED</button>
+        </div>
+        <div id="delivery-view" class="delivery-track">Aucune commande active.</div>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -705,8 +1539,14 @@ function architectureHtml() {
       user: null,
       product: null,
       order: null,
+      cart: [],
+      shopProducts: [],
+      userOrders: [],
+      currentOrder: null,
       busy: false
     }
+
+    const deliveryFlow = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED']
 
     function q(id) {
       return document.getElementById(id)
@@ -741,6 +1581,211 @@ function architectureHtml() {
         text = JSON.stringify(payload, null, 2)
       }
       q('api-output').textContent = 'Sortie API:\n' + text
+    }
+
+    function money(value) {
+      const amount = Number(value || 0)
+      return amount.toFixed(2) + ' EUR'
+    }
+
+    function renderCart() {
+      if (!state.cart.length) {
+        q('cart-view').textContent = 'Panier vide'
+        return
+      }
+
+      const lines = state.cart.map(item => {
+        return item.name + ' x' + item.quantity + ' = ' + money(item.quantity * item.price)
+      })
+      const total = state.cart.reduce((sum, item) => sum + item.quantity * item.price, 0)
+      q('cart-view').textContent = lines.join('\n') + '\n----------------\nTotal: ' + money(total)
+    }
+
+    function renderDelivery(order) {
+      if (!order) {
+        q('delivery-view').textContent = 'Aucune commande active.'
+        return
+      }
+
+      const status = order.status || 'PENDING'
+      const currentIndex = deliveryFlow.indexOf(status)
+      const steps = deliveryFlow.map((step, index) => {
+        let cls = 'step'
+        if (index < currentIndex) {
+          cls += ' done'
+        }
+        if (index === currentIndex) {
+          cls += ' now'
+        }
+        return '<div class="' + cls + '">' + step + '</div>'
+      }).join('')
+
+      q('delivery-view').innerHTML =
+        '<div><strong>Commande #' + order.id + '</strong></div>' +
+        '<div>Statut courant: ' + status + '</div>' +
+        '<div class="steps">' + steps + '</div>'
+    }
+
+    function addProductToCart(productId, quantity) {
+      const product = state.shopProducts.find(item => Number(item.id) === Number(productId))
+      if (!product) {
+        addTimeline(false, 'Panier', 'Produit introuvable')
+        return
+      }
+
+      const safeQty = Number(quantity) > 0 ? Number(quantity) : 1
+      const existing = state.cart.find(item => Number(item.id) === Number(product.id))
+      if (existing) {
+        existing.quantity += safeQty
+      } else {
+        state.cart.push({
+          id: product.id,
+          name: product.name,
+          price: Number(product.price || 0),
+          quantity: safeQty
+        })
+      }
+
+      renderCart()
+      addTimeline(true, 'Panier', 'Produit ajoute au panier')
+      showOutput({ cart: state.cart })
+    }
+
+    function renderShopProducts() {
+      const root = q('shop-products')
+      if (!state.shopProducts.length) {
+        root.innerHTML = '<div class="small">Aucun produit disponible pour le moment.</div>'
+        return
+      }
+
+      root.innerHTML = state.shopProducts.map(product => {
+        return '<article class="product-card">' +
+          '<p class="product-title">' + product.name + '</p>' +
+          '<p class="product-meta">Prix: ' + money(product.price) + ' | Stock: ' + (product.stock || 0) + '</p>' +
+          '<div class="qty-row"><span>Quantite</span><input id="qty-' + product.id + '" type="number" min="1" value="1" /></div>' +
+          '<button class="btn add-to-cart" data-id="' + product.id + '">Ajouter au panier</button>' +
+        '</article>'
+      }).join('')
+    }
+
+    async function ensureCustomerSession() {
+      if (state.token) {
+        return
+      }
+
+      randomizeIdentity()
+      await runStep('Register (client)', stepRegister)
+      await runStep('Login (client)', stepLogin)
+    }
+
+    async function loadProductsForShop() {
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'product-service'],
+        ['product-service', 'db-products']
+      ])
+
+      const response = await apiCall('/api/products/products', { method: 'GET' })
+      state.shopProducts = Array.isArray(response) ? response : (response.data || [])
+      renderShopProducts()
+      addTimeline(true, 'Catalogue', 'Produits charges depuis Product Service')
+      showOutput(response)
+    }
+
+    async function checkoutFromCart() {
+      if (!state.cart.length) {
+        throw new Error('Panier vide: ajoute un produit avant de commander')
+      }
+
+      await ensureCustomerSession()
+
+      const userId = state.user && state.user.id ? state.user.id : 1
+      const payload = {
+        userId,
+        items: state.cart.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          unitPrice: item.price
+        }))
+      }
+
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'order-service'],
+        ['order-service', 'db-orders'],
+        ['order-service', 'rabbitmq']
+      ])
+
+      const order = await apiCall('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + state.token
+        },
+        body: JSON.stringify(payload)
+      })
+
+      state.currentOrder = order
+      state.order = order
+      state.cart = []
+      renderCart()
+      renderDelivery(order)
+      addTimeline(true, 'Checkout', 'Commande creee et evenement RabbitMQ emis')
+      showOutput(order)
+      return order
+    }
+
+    async function loadMyOrders() {
+      await ensureCustomerSession()
+      const userId = state.user && state.user.id ? state.user.id : 1
+
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'order-service'],
+        ['order-service', 'db-orders']
+      ])
+
+      const orders = await apiCall('/api/orders/user/' + userId, {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + state.token
+        }
+      })
+
+      state.userOrders = Array.isArray(orders) ? orders : []
+      if (state.userOrders.length) {
+        state.currentOrder = state.userOrders[0]
+      }
+      renderDelivery(state.currentOrder)
+      addTimeline(true, 'Mes commandes', 'Historique charge depuis Order Service')
+      showOutput(orders)
+      return orders
+    }
+
+    async function moveDeliveryStatus(nextStatus) {
+      await ensureCustomerSession()
+      if (!state.currentOrder || !state.currentOrder.id) {
+        throw new Error('Aucune commande active pour changer le statut')
+      }
+
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'order-service'],
+        ['order-service', 'db-orders']
+      ])
+
+      const order = await apiCall('/api/orders/' + state.currentOrder.id + '/status?status=' + nextStatus, {
+        method: 'PATCH',
+        headers: {
+          Authorization: 'Bearer ' + state.token
+        }
+      })
+
+      state.currentOrder = order
+      renderDelivery(order)
+      addTimeline(true, 'Livraison', 'Statut passe a ' + nextStatus)
+      showOutput(order)
+      return order
     }
 
     function markPath(paths) {
@@ -1009,15 +2054,87 @@ function architectureHtml() {
       })
 
       q('btn-run-all').addEventListener('click', runAll)
+
+      q('btn-load-products').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Catalogue', loadProductsForShop)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-checkout').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Checkout', checkoutFromCart)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-my-orders').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Mes commandes', loadMyOrders)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-status-confirmed').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Status CONFIRMED', () => moveDeliveryStatus('CONFIRMED'))
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-status-shipped').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Status SHIPPED', () => moveDeliveryStatus('SHIPPED'))
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-status-delivered').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Status DELIVERED', () => moveDeliveryStatus('DELIVERED'))
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('shop-products').addEventListener('click', (event) => {
+        const target = event.target
+        if (!(target instanceof HTMLElement)) {
+          return
+        }
+        if (!target.classList.contains('add-to-cart')) {
+          return
+        }
+
+        const productId = Number(target.getAttribute('data-id'))
+        const qtyInput = q('qty-' + productId)
+        const quantity = qtyInput ? Number(qtyInput.value) : 1
+        addProductToCart(productId, quantity)
+      })
     }
 
     ;(async function bootstrap() {
       bindActions()
       const topology = await loadTopology()
       renderTopology(topology)
+      renderCart()
+      renderDelivery(null)
+      await loadProductsForShop()
       await refresh()
       setInterval(refresh, 5000)
-      addTimeline(true, 'Dashboard pret', 'Tu peux lancer les tests visuels')
+      addTimeline(true, 'Dashboard pret', 'Mode technique + mode client livraison actifs')
     })()
   </script>
 </body>
@@ -1079,9 +2196,17 @@ app.get('/architecture', (req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(architectureHtml());
 });
-app.get('/', (req, res) => {
+app.get('/admin', (req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(architectureHtml());
+});
+app.get('/shop', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(shopHtml());
+});
+app.get('/', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(shopHtml());
 });
 // 🔓 Middleware conditionnel pour exclure le login et le register de la vérification JWT
 const userAuthWrapper = (req, res, next) => {
