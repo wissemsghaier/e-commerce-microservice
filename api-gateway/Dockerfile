@@ -7,9 +7,9 @@ ENV NODE_ENV=development
 
 COPY package*.json ./
 RUN npm ci --include=dev
-RUN npm install --no-save --no-package-lock typescript@6.0.3
 
-COPY . .
+COPY tsconfig.json ./
+COPY src ./src
 RUN npm run build
 
 # Étape 2 : image finale, légère
