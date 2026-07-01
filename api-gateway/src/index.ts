@@ -287,6 +287,12 @@ function architectureHtml() {
       stroke: #24507c;
       stroke-width: 2.2;
       fill: none;
+      transition: stroke 0.3s ease, stroke-width 0.3s ease;
+    }
+
+    .edge.active {
+      stroke: #ff6b35;
+      stroke-width: 3.6;
     }
 
     .edge-label {
@@ -398,6 +404,112 @@ function architectureHtml() {
       color: #1d2f45;
     }
 
+    .workbench {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 14px;
+    }
+
+    .panel {
+      background: #ffffffbf;
+      border: 1px solid #203e5f33;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.86rem;
+    }
+
+    .field input {
+      border: 1px solid #24416144;
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 0.92rem;
+      background: #ffffff;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      border: 1px solid #24416155;
+      background: #ffffff;
+      color: #1f334a;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #f0f8ff;
+    }
+
+    .btn.primary {
+      background: #ff6b35;
+      color: #fff;
+      border-color: #ff6b35;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .token-box,
+    .output-box {
+      border: 1px dashed #25406266;
+      border-radius: 10px;
+      padding: 8px;
+      background: #ffffffa8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .token-box { margin-bottom: 8px; }
+
+    .timeline {
+      margin: 0;
+      padding-left: 18px;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .timeline li {
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .ok { color: #0f6f43; }
+    .ko { color: #a42033; }
+
     @keyframes rise {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -405,6 +517,8 @@ function architectureHtml() {
 
     @media (max-width: 900px) {
       .client, .gateway, .user, .product, .order, .dbu, .dbp, .dbo, .mq { grid-column: 1 / -1; }
+      .workbench { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -427,28 +541,28 @@ function architectureHtml() {
           </marker>
         </defs>
 
-        <line class="edge" marker-end="url(#arrow)" x1="280" y1="110" x2="500" y2="110" />
+        <line class="edge" data-from="client" data-to="api-gateway" marker-end="url(#arrow)" x1="280" y1="110" x2="500" y2="110" />
         <text class="edge-label" x="360" y="96">HTTPS</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="560" y1="150" x2="210" y2="260" />
+        <line class="edge" data-from="api-gateway" data-to="user-service" marker-end="url(#arrow)" x1="560" y1="150" x2="210" y2="260" />
         <text class="edge-label" x="350" y="210">HTTP</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="600" y1="150" x2="600" y2="260" />
+        <line class="edge" data-from="api-gateway" data-to="product-service" marker-end="url(#arrow)" x1="600" y1="150" x2="600" y2="260" />
         <text class="edge-label" x="612" y="210">HTTP</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="640" y1="150" x2="990" y2="260" />
+        <line class="edge" data-from="api-gateway" data-to="order-service" marker-end="url(#arrow)" x1="640" y1="150" x2="990" y2="260" />
         <text class="edge-label" x="810" y="210">HTTP</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="210" y1="340" x2="210" y2="470" />
+        <line class="edge" data-from="user-service" data-to="db-users" marker-end="url(#arrow)" x1="210" y1="340" x2="210" y2="470" />
         <text class="edge-label" x="220" y="410">SQL</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="600" y1="340" x2="600" y2="470" />
+        <line class="edge" data-from="product-service" data-to="db-products" marker-end="url(#arrow)" x1="600" y1="340" x2="600" y2="470" />
         <text class="edge-label" x="612" y="410">SQL</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="990" y1="340" x2="990" y2="470" />
+        <line class="edge" data-from="order-service" data-to="db-orders" marker-end="url(#arrow)" x1="990" y1="340" x2="990" y2="470" />
         <text class="edge-label" x="1002" y="410">SQL</text>
 
-        <line class="edge" marker-end="url(#arrow)" x1="1040" y1="260" x2="1040" y2="150" />
+        <line class="edge" data-from="order-service" data-to="rabbitmq" marker-end="url(#arrow)" x1="1040" y1="260" x2="1040" y2="150" />
         <text class="edge-label" x="1052" y="210">AMQP</text>
 
         <g class="node" data-id="client" transform="translate(80,70)">
@@ -569,9 +683,258 @@ function architectureHtml() {
       <h2>Canaux de communication</h2>
       <ul id="links-list"></ul>
     </section>
+
+    <section class="workbench">
+      <div class="panel">
+        <h2>Scenario dynamique (test visuel)</h2>
+        <div class="form-grid">
+          <label class="field">Email
+            <input id="email" type="email" value="alice+demo@example.com" />
+          </label>
+          <label class="field">Username
+            <input id="username" type="text" value="alice-demo" />
+          </label>
+          <label class="field">Password
+            <input id="password" type="text" value="Pass1234!" />
+          </label>
+          <label class="field">Nom produit
+            <input id="product-name" type="text" value="Laptop Vision" />
+          </label>
+          <label class="field">Prix
+            <input id="product-price" type="number" step="0.01" value="999.99" />
+          </label>
+          <label class="field">Quantite commande
+            <input id="order-qty" type="number" min="1" value="2" />
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="btn-register" class="btn">1. Register</button>
+          <button id="btn-login" class="btn">2. Login</button>
+          <button id="btn-create-product" class="btn">3. Creer produit</button>
+          <button id="btn-create-order" class="btn">4. Creer commande</button>
+          <button id="btn-run-all" class="btn primary">Executer scenario complet</button>
+        </div>
+
+        <div id="token-preview" class="token-box">Token: non genere</div>
+        <div id="api-output" class="output-box">Sortie API: en attente...</div>
+      </div>
+
+      <div class="panel">
+        <h2>Timeline des appels internes</h2>
+        <ol id="timeline" class="timeline"></ol>
+      </div>
+    </section>
   </div>
 
   <script>
+    const state = {
+      token: null,
+      user: null,
+      product: null,
+      order: null,
+      busy: false
+    }
+
+    function q(id) {
+      return document.getElementById(id)
+    }
+
+    function setBusy(value) {
+      state.busy = value
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.disabled = value
+      })
+    }
+
+    function randomizeIdentity() {
+      const stamp = Date.now()
+      q('email').value = 'alice+' + stamp + '@example.com'
+      q('username').value = 'alice-' + stamp
+    }
+
+    function addTimeline(ok, title, details) {
+      const timeline = q('timeline')
+      const item = document.createElement('li')
+      item.className = ok ? 'ok' : 'ko'
+      item.textContent = '[' + new Date().toLocaleTimeString() + '] ' + title + ' | ' + details
+      timeline.prepend(item)
+    }
+
+    function showOutput(payload) {
+      let text = ''
+      if (typeof payload === 'string') {
+        text = payload
+      } else {
+        text = JSON.stringify(payload, null, 2)
+      }
+      q('api-output').textContent = 'Sortie API:\n' + text
+    }
+
+    function markPath(paths) {
+      document.querySelectorAll('.edge').forEach(edge => edge.classList.remove('active'))
+      paths.forEach(path => {
+        const selector = '.edge[data-from="' + path[0] + '"][data-to="' + path[1] + '"]'
+        document.querySelectorAll(selector).forEach(edge => edge.classList.add('active'))
+      })
+      setTimeout(() => {
+        document.querySelectorAll('.edge').forEach(edge => edge.classList.remove('active'))
+      }, 1400)
+    }
+
+    async function apiCall(url, options) {
+      const response = await fetch(url, options)
+      const raw = await response.text()
+      let body = raw
+      try {
+        body = raw ? JSON.parse(raw) : {}
+      } catch {
+        body = raw
+      }
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status + ' - ' + (typeof body === 'string' ? body : JSON.stringify(body)))
+      }
+      return body
+    }
+
+    async function stepRegister() {
+      const payload = {
+        email: q('email').value,
+        username: q('username').value,
+        password: q('password').value
+      }
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'user-service'],
+        ['user-service', 'db-users']
+      ])
+      const user = await apiCall('/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      state.user = user
+      showOutput(user)
+      addTimeline(true, 'Register', 'Gateway -> User Service -> DB Users')
+      return user
+    }
+
+    async function stepLogin() {
+      const payload = {
+        email: q('email').value,
+        password: q('password').value
+      }
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'user-service'],
+        ['user-service', 'db-users']
+      ])
+      const token = await apiCall('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      state.token = token.access_token
+      q('token-preview').textContent = 'Token: ' + state.token
+      showOutput(token)
+      addTimeline(true, 'Login', 'JWT genere et retourne via Gateway')
+      return token
+    }
+
+    async function stepCreateProduct() {
+      const payload = {
+        name: q('product-name').value,
+        description: 'Produit cree depuis le dashboard dynamique',
+        price: Number(q('product-price').value),
+        stock: 10,
+        image_url: 'https://example.com/product.png'
+      }
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'product-service'],
+        ['product-service', 'db-products']
+      ])
+      const product = await apiCall('/api/products/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      state.product = product
+      showOutput(product)
+      addTimeline(true, 'Create Product', 'Gateway -> Product Service -> DB Products')
+      return product
+    }
+
+    async function stepCreateOrder() {
+      if (!state.token) {
+        throw new Error('Token manquant: executer Login avant Create Order')
+      }
+      if (!state.product || !state.product.id) {
+        throw new Error('Produit manquant: executer Create Product avant Create Order')
+      }
+      const userId = state.user && state.user.id ? state.user.id : 1
+      const quantity = Number(q('order-qty').value)
+      const unitPrice = Number(q('product-price').value)
+
+      const payload = {
+        userId,
+        items: [
+          {
+            productId: state.product.id,
+            quantity,
+            unitPrice
+          }
+        ]
+      }
+
+      markPath([
+        ['client', 'api-gateway'],
+        ['api-gateway', 'order-service'],
+        ['order-service', 'db-orders'],
+        ['order-service', 'rabbitmq']
+      ])
+      const order = await apiCall('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + state.token
+        },
+        body: JSON.stringify(payload)
+      })
+      state.order = order
+      showOutput(order)
+      addTimeline(true, 'Create Order', 'Gateway -> Order Service -> DB Orders + RabbitMQ')
+      return order
+    }
+
+    async function runStep(label, fn) {
+      try {
+        const result = await fn()
+        return result
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        addTimeline(false, label, message)
+        showOutput(message)
+        throw error
+      }
+    }
+
+    async function runAll() {
+      setBusy(true)
+      randomizeIdentity()
+      try {
+        await runStep('Register', stepRegister)
+        await runStep('Login', stepLogin)
+        await runStep('Create Product', stepCreateProduct)
+        await runStep('Create Order', stepCreateOrder)
+        addTimeline(true, 'Scenario complet', 'Tous les appels ont reussi')
+      } catch {
+        addTimeline(false, 'Scenario complet', 'Interrompu suite a une erreur')
+      } finally {
+        setBusy(false)
+      }
+    }
+
     async function loadTopology() {
       const response = await fetch('/api/architecture/topology')
       return response.json()
@@ -613,16 +976,16 @@ function architectureHtml() {
       })
 
       const date = new Date(statusPayload.checkedAt)
-      document.getElementById('last-refresh').textContent = 'Derniere mise a jour: ' + date.toLocaleString()
+      q('last-refresh').textContent = 'Derniere mise a jour: ' + date.toLocaleString()
     }
 
     function renderTopology(topology) {
       const flow = topology.links
         .map(link => link.from + ' -> ' + link.to + ' [' + link.type + ']')
         .join('    |    ')
-      document.getElementById('flow').textContent = flow
+      q('flow').textContent = flow
 
-      const linksList = document.getElementById('links-list')
+      const linksList = q('links-list')
       linksList.innerHTML = ''
       topology.links.forEach(link => {
         const item = document.createElement('li')
@@ -636,11 +999,53 @@ function architectureHtml() {
       updateStatusCards(status)
     }
 
+    function bindActions() {
+      q('btn-register').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Register', stepRegister)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-login').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Login', stepLogin)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-create-product').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Create Product', stepCreateProduct)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-create-order').addEventListener('click', async () => {
+        setBusy(true)
+        try {
+          await runStep('Create Order', stepCreateOrder)
+        } finally {
+          setBusy(false)
+        }
+      })
+
+      q('btn-run-all').addEventListener('click', runAll)
+    }
+
     ;(async function bootstrap() {
+      bindActions()
       const topology = await loadTopology()
       renderTopology(topology)
       await refresh()
       setInterval(refresh, 5000)
+      addTimeline(true, 'Dashboard pret', 'Tu peux lancer les tests visuels')
     })()
   </script>
 </body>
