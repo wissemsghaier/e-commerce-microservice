@@ -181,7 +181,7 @@ function shopHtml() {
       --primary-2: #ff9f6e;
       --ok: #15784a;
       --danger: #b5253a;
-      --card: #ffffffd7;
+      --card: #ffffffdc;
       --line: #2242602d;
     }
 
@@ -199,8 +199,8 @@ function shopHtml() {
       padding: 20px;
     }
 
-    .shell {
-      max-width: 1280px;
+    .app {
+      max-width: 1240px;
       margin: 0 auto;
       display: grid;
       gap: 14px;
@@ -218,13 +218,12 @@ function shopHtml() {
       box-shadow: 0 10px 24px #17324a1c;
     }
 
-    .nav-tag {
+    .brand {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.02em;
+      font-size: 0.92rem;
       font-weight: 700;
-      color: #3c5877;
-      margin-right: 4px;
+      margin-right: 6px;
+      color: #3b5676;
     }
 
     .nav-link {
@@ -250,59 +249,39 @@ function shopHtml() {
       background: linear-gradient(120deg, var(--primary), var(--primary-2));
     }
 
+    .chip {
+      margin-left: auto;
+      border-radius: 999px;
+      border: 1px solid #22426035;
+      background: #ffffffb8;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      font-weight: 700;
+    }
+
     .hero {
       border: 1px solid #ffffffa8;
-      border-radius: 24px;
-      padding: 20px;
-      background: linear-gradient(120deg, #ffffffd9 0%, #fff7f0d8 45%, #eef8ffd8 100%);
-      box-shadow: 0 25px 55px #1f2e3f1f;
-      position: relative;
-      overflow: hidden;
+      border-radius: 20px;
+      padding: 18px;
+      background: linear-gradient(120deg, #ffffffdb 0%, #fff8f2d8 45%, #eef8ffd8 100%);
+      box-shadow: 0 20px 44px #1f2e3f1a;
     }
 
-    .hero::after {
-      content: '';
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      right: -70px;
-      top: -90px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #ffd2b8 0, #ffd2b800 70%);
-    }
-
-    h1 {
+    .hero h1 {
       margin: 0;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.6rem);
-      letter-spacing: 0.01em;
+      font-size: clamp(1.45rem, 3vw, 2.4rem);
     }
 
-    .subtitle {
-      margin: 8px 0 14px;
-      font-size: 1rem;
+    .hero p {
+      margin: 8px 0 0;
       color: #3a4f67;
       max-width: 720px;
     }
 
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .chip {
-      border-radius: 999px;
-      border: 1px solid #22426035;
-      background: #ffffffb8;
-      font-size: 0.82rem;
-      padding: 6px 12px;
-      font-weight: 600;
-    }
-
     .layout {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 1.45fr 0.95fr;
       gap: 14px;
       align-items: start;
     }
@@ -315,9 +294,9 @@ function shopHtml() {
       box-shadow: 0 12px 28px #12263a17;
     }
 
-    .panel-title {
+    .panel h2 {
       margin: 0 0 10px;
-      font-size: 1.12rem;
+      font-size: 1.1rem;
       font-family: 'Space Grotesk', sans-serif;
     }
 
@@ -357,6 +336,38 @@ function shopHtml() {
       transform: none;
     }
 
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+      animation: rise .35s ease both;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: #3b546f;
+    }
+
+    .field input {
+      border: 1px solid #22426044;
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 0.9rem;
+      background: #fff;
+    }
+
     .products {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -368,11 +379,16 @@ function shopHtml() {
       border-radius: 12px;
       padding: 10px;
       background: #ffffffcf;
-      animation: rise .45s ease both;
+    }
+
+    .product-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .product h3 {
-      margin: 0 0 5px;
+      margin: 0 0 4px;
       font-size: 1rem;
     }
 
@@ -439,36 +455,80 @@ function shopHtml() {
       border-color: #ff6b3566;
     }
 
-    .services {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .service {
-      font-size: 0.76rem;
-      border-radius: 999px;
-      border: 1px solid #27435f3a;
-      padding: 4px 9px;
-      background: #f6f9fc;
-    }
-
-    .service.up { color: var(--ok); border-color: #15784a44; background: #ebfff3; }
-    .service.down { color: var(--danger); border-color: #b5253a44; background: #fff2f5; }
-
     .feed {
       margin: 0;
       padding-left: 18px;
-      max-height: 180px;
+      max-height: 280px;
       overflow-y: auto;
       font-size: 0.82rem;
     }
 
     .feed li { margin-bottom: 7px; }
-
     .ok { color: var(--ok); }
     .ko { color: var(--danger); }
+
+    .detail-hero {
+      border: 1px solid #22426033;
+      border-radius: 14px;
+      background: linear-gradient(120deg, #fffaf4, #eef8ff);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .detail-hero h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .detail-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.86rem;
+      color: #40566f;
+    }
+
+    .confirm-box {
+      border: 1px solid #22426038;
+      border-radius: 14px;
+      background: linear-gradient(140deg, #fffaf2, #edf7ff);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .confirm-title {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .eta {
+      display: inline-block;
+      border: 1px solid #15784a44;
+      border-radius: 999px;
+      padding: 4px 9px;
+      color: #15784a;
+      background: #e9fff2;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #dde7f1;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 42%;
+      background: linear-gradient(120deg, #ff6b35, #ffb083);
+    }
 
     @keyframes rise {
       from { opacity: 0; transform: translateY(5px); }
@@ -479,90 +539,181 @@ function shopHtml() {
       .layout { grid-template-columns: 1fr; }
       .products { grid-template-columns: 1fr; }
       .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chip { margin-left: 0; }
+      .form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
+  <div class="app">
     <nav class="topnav" aria-label="Navigation principale">
-      <span class="nav-tag">Navigation</span>
-      <a class="nav-link active" href="/">Boutique</a>
-      <a class="nav-link" href="/shop">Boutique (alias)</a>
-      <a class="nav-link" href="/architecture">Admin Ops</a>
-      <a class="nav-link" href="/admin">Admin (alias)</a>
+      <span class="brand">Livraison Express</span>
+      <a class="nav-link" href="/login" data-route="/login">Login</a>
+      <a class="nav-link" href="/catalog" data-route="/catalog">Catalogue</a>
+      <a class="nav-link" href="/checkout" data-route="/checkout">Checkout</a>
+      <a class="nav-link" href="/orders" data-route="/orders">Suivi commande</a>
+      <span class="chip" id="session-chip">Session: non connecte</span>
     </nav>
 
     <section class="hero">
-      <h1>Boutique Livraison Express</h1>
-      <p class="subtitle">Simule un vrai parcours client e-commerce: voir le catalogue, ajouter au panier, passer commande et suivre la livraison en direct.</p>
-      <div class="hero-meta">
-        <span class="chip" id="shop-last-sync">Sync services: -</span>
-        <span class="chip">Mode client: dynamique</span>
-        <a class="chip" href="/architecture" style="text-decoration:none;color:inherit">Ouvrir mode Admin / Architecture</a>
-      </div>
-      <div class="services" id="shop-services"></div>
+      <h1>Site e-commerce dynamique</h1>
+      <p>Parcours guide: login, consulter les produits, passer la commande, suivre la livraison.</p>
     </section>
 
     <section class="layout">
       <article class="panel">
-        <h2 class="panel-title">Catalogue Produits</h2>
-        <div class="toolbar">
-          <button class="btn" id="shop-refresh" data-shop-action="1">Rafraichir catalogue</button>
-          <button class="btn" id="shop-orders" data-shop-action="1">Mes commandes</button>
-          <button class="btn primary" id="shop-checkout" data-shop-action="1">Valider livraison</button>
-        </div>
-        <div id="shop-products" class="products"></div>
+        <section class="page" data-page="login">
+          <h2>1) Ecran Login / Inscription</h2>
+          <div class="form-grid">
+            <label class="field">Email
+              <input id="reg-email" type="email" value="client@example.com" />
+            </label>
+            <label class="field">Username
+              <input id="reg-username" type="text" value="client-demo" />
+            </label>
+            <label class="field">Password
+              <input id="reg-password" type="text" value="Pass1234!" />
+            </label>
+            <label class="field">Password (login)
+              <input id="login-password" type="text" value="Pass1234!" />
+            </label>
+          </div>
+          <div class="toolbar">
+            <button class="btn" id="btn-register" data-action="1">Inscription</button>
+            <button class="btn primary" id="btn-login" data-action="1">Login</button>
+            <button class="btn" id="btn-logout" data-action="1">Logout</button>
+          </div>
+          <div id="auth-status" class="block">Pas de session active.</div>
+        </section>
+
+        <section class="page" data-page="catalog">
+          <h2>2) Ecran Catalogue</h2>
+          <div class="toolbar">
+            <button class="btn" id="btn-refresh" data-action="1">Rafraichir produits</button>
+            <button class="btn" id="btn-seed" data-action="1">Generer demo produits</button>
+            <button class="btn primary" id="btn-go-checkout" data-action="1">Aller au checkout</button>
+          </div>
+          <div id="catalog-grid" class="products"></div>
+        </section>
+
+        <section class="page" data-page="product">
+          <h2>Page produit detaillee</h2>
+          <div id="product-detail" class="block">Selectionne un produit depuis le catalogue.</div>
+          <div class="toolbar">
+            <button class="btn" id="btn-detail-back" data-action="1">Retour catalogue</button>
+            <button class="btn primary" id="btn-detail-add" data-action="1">Ajouter au panier</button>
+            <button class="btn" id="btn-detail-checkout" data-action="1">Aller checkout</button>
+          </div>
+        </section>
+
+        <section class="page" data-page="checkout">
+          <h2>3) Ecran Checkout</h2>
+          <div id="checkout-cart" class="block">Panier vide</div>
+          <div class="toolbar">
+            <button class="btn" id="btn-clear-cart" data-action="1">Vider panier</button>
+            <button class="btn primary" id="btn-place-order" data-action="1">Passer commande</button>
+          </div>
+        </section>
+
+        <section class="page" data-page="orders">
+          <h2>4) Ecran Suivi Commande</h2>
+          <div class="toolbar">
+            <button class="btn" id="btn-load-orders" data-action="1">Charger commandes</button>
+            <button class="btn" id="btn-confirmed" data-action="1">CONFIRMED</button>
+            <button class="btn" id="btn-shipped" data-action="1">SHIPPED</button>
+            <button class="btn" id="btn-delivered" data-action="1">DELIVERED</button>
+          </div>
+          <div id="orders-list" class="block">Aucune commande chargee.</div>
+          <div id="order-tracker" class="block">Aucune commande active.</div>
+        </section>
+
+        <section class="page" data-page="confirmation">
+          <h2>Confirmation de commande</h2>
+          <div id="confirmation-view" class="block">Aucune commande confirmee.</div>
+          <div class="toolbar">
+            <button class="btn" id="btn-confirmation-catalog" data-action="1">Continuer les achats</button>
+            <button class="btn primary" id="btn-confirmation-orders" data-action="1">Voir suivi commande</button>
+          </div>
+        </section>
       </article>
 
       <aside class="panel">
-        <h2 class="panel-title">Panier & Livraison</h2>
-        <div id="shop-cart" class="block">Panier vide</div>
-        <div class="toolbar">
-          <button class="btn" id="status-confirmed" data-shop-action="1">CONFIRMED</button>
-          <button class="btn" id="status-shipped" data-shop-action="1">SHIPPED</button>
-          <button class="btn" id="status-delivered" data-shop-action="1">DELIVERED</button>
-        </div>
-        <div id="shop-delivery" class="block">Aucune commande active.</div>
-        <ol id="shop-feed" class="feed"></ol>
+        <h2>Journal</h2>
+        <ol id="feed" class="feed"></ol>
       </aside>
     </section>
   </div>
 
   <script>
-    const shopState = {
+    const state = {
+      token: localStorage.getItem('shop_token') || null,
+      userId: Number(localStorage.getItem('shop_user_id') || '0') || 0,
+      userEmail: localStorage.getItem('shop_user_email') || '',
       products: [],
       cart: [],
-      token: null,
-      user: null,
+      orders: [],
       currentOrder: null,
+      selectedProduct: null,
+      confirmationEta: null,
       busy: false
     }
 
     const deliverySteps = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED']
+    const protectedPaths = ['/catalog', '/product', '/checkout', '/orders', '/confirmation']
 
-    function s(id) {
+    function el(id) {
       return document.getElementById(id)
     }
 
-    function setShopBusy(value) {
-      shopState.busy = value
-      document.querySelectorAll('[data-shop-action]').forEach(btn => {
+    function setBusy(value) {
+      state.busy = value
+      document.querySelectorAll('[data-action]').forEach(btn => {
         btn.disabled = value
       })
+    }
+
+    function saveSession() {
+      if (state.token) {
+        localStorage.setItem('shop_token', state.token)
+      }
+      if (state.userId) {
+        localStorage.setItem('shop_user_id', String(state.userId))
+      }
+      if (state.userEmail) {
+        localStorage.setItem('shop_user_email', state.userEmail)
+      }
+    }
+
+    function clearSession() {
+      localStorage.removeItem('shop_token')
+      localStorage.removeItem('shop_user_id')
+      localStorage.removeItem('shop_user_email')
+    }
+
+    function decodeUserId(token) {
+      try {
+        const part = token.split('.')[1]
+        const normalized = part.replace(/-/g, '+').replace(/_/g, '/')
+        const payload = JSON.parse(atob(normalized))
+        const id = Number(payload.sub)
+        return Number.isFinite(id) ? id : 0
+      } catch {
+        return 0
+      }
     }
 
     function money(value) {
       return Number(value || 0).toFixed(2) + ' EUR'
     }
 
-    function addFeed(ok, label, details) {
+    function addFeed(ok, title, details) {
       const item = document.createElement('li')
       item.className = ok ? 'ok' : 'ko'
-      item.textContent = '[' + new Date().toLocaleTimeString() + '] ' + label + ' | ' + details
-      s('shop-feed').prepend(item)
+      item.textContent = '[' + new Date().toLocaleTimeString() + '] ' + title + ' | ' + details
+      el('feed').prepend(item)
     }
 
-    function callApi(url, options) {
+    function apiCall(url, options) {
       return fetch(url, options).then(async response => {
         const raw = await response.text()
         let payload = raw
@@ -578,43 +729,208 @@ function shopHtml() {
       })
     }
 
-    function renderProducts() {
-      const root = s('shop-products')
-      if (!shopState.products.length) {
-        root.innerHTML = '<div class="meta">Aucun produit. Cree un produit depuis le mode Admin pour commencer.</div>'
-        return
+    function requireAuth() {
+      if (!state.token) {
+        throw new Error('Login requis')
+      }
+    }
+
+    function withAction(label, work) {
+      setBusy(true)
+      return Promise.resolve()
+        .then(work)
+        .catch(error => {
+          const message = error instanceof Error ? error.message : String(error)
+          addFeed(false, label, message)
+          if (message.toLowerCase().includes('login requis')) {
+            navigate('/login')
+          }
+        })
+        .finally(() => {
+          setBusy(false)
+        })
+    }
+
+    function renderSessionUi() {
+      const connected = !!state.token
+      el('session-chip').textContent = connected
+        ? 'Session: connecte (' + (state.userEmail || ('id ' + state.userId)) + ')'
+        : 'Session: non connecte'
+
+      el('auth-status').textContent = connected
+        ? 'Connecte. Tu peux acceder au catalogue, checkout et suivi.'
+        : 'Pas de session active.'
+    }
+
+    function normalizePath(pathname) {
+      if (pathname === '/' || pathname === '/shop') {
+        return state.token ? '/catalog' : '/login'
+      }
+      if (['/login', '/catalog', '/product', '/checkout', '/orders', '/confirmation'].includes(pathname)) {
+        return pathname
+      }
+      return '/login'
+    }
+
+    function renderPage(path) {
+      const route = normalizePath(path)
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active')
+      })
+
+      const activePage = document.querySelector('.page[data-page="' + route.slice(1) + '"]')
+      if (activePage) {
+        activePage.classList.add('active')
       }
 
-      root.innerHTML = shopState.products.map(product => {
+      document.querySelectorAll('.nav-link').forEach(link => {
+        const isActive = link.getAttribute('data-route') === route
+        link.classList.toggle('active', isActive)
+      })
+
+      if (route === '/checkout') {
+        renderCheckoutCart()
+      }
+
+      if (route === '/product') {
+        renderProductDetail()
+      }
+
+      if (route === '/orders') {
+        renderOrdersList()
+        renderOrderTracker()
+      }
+
+      if (route === '/confirmation') {
+        renderConfirmation()
+      }
+    }
+
+    function navigate(path) {
+      const route = normalizePath(path)
+      if (protectedPaths.includes(route) && !state.token) {
+        history.pushState({}, '', '/login')
+        renderPage('/login')
+        return
+      }
+      history.pushState({}, '', route)
+      renderPage(route)
+    }
+
+    function renderCatalog() {
+      const root = el('catalog-grid')
+      if (!state.products.length) {
+        root.innerHTML = '<div class="meta">Aucun produit. Clique sur "Generer demo produits".</div>'
+        return
+      }
+      root.innerHTML = state.products.map(product => {
         return '<article class="product">' +
           '<h3>' + product.name + '</h3>' +
           '<p class="meta">Prix: ' + money(product.price) + ' | Stock: ' + (product.stock || 0) + '</p>' +
-          '<div class="row"><span>Quantite</span><input id="shop-qty-' + product.id + '" type="number" min="1" value="1" /></div>' +
-          '<button class="btn" data-add-product="' + product.id + '">Ajouter au panier</button>' +
+          '<div class="row"><span>Quantite</span><input id="qty-' + product.id + '" type="number" min="1" value="1" /></div>' +
+          '<div class="product-actions">' +
+            '<button class="btn" data-view-product="' + product.id + '">Voir details</button>' +
+            '<button class="btn" data-add-product="' + product.id + '">Ajouter au panier</button>' +
+          '</div>' +
         '</article>'
       }).join('')
     }
 
-    function renderCart() {
-      if (!shopState.cart.length) {
-        s('shop-cart').textContent = 'Panier vide'
+    function addToCart(productId, quantity) {
+      const product = state.products.find(item => Number(item.id) === Number(productId))
+      if (!product) {
+        addFeed(false, 'Panier', 'Produit introuvable')
         return
       }
-
-      const lines = shopState.cart.map(item => item.name + ' x' + item.quantity + ' = ' + money(item.quantity * item.price))
-      const total = shopState.cart.reduce((sum, item) => sum + item.quantity * item.price, 0)
-      s('shop-cart').textContent = lines.join('\n') + '\n----------------\nTotal: ' + money(total)
+      const qty = Number(quantity) > 0 ? Number(quantity) : 1
+      const existing = state.cart.find(item => Number(item.id) === Number(product.id))
+      if (existing) {
+        existing.quantity += qty
+      } else {
+        state.cart.push({
+          id: product.id,
+          name: product.name,
+          price: Number(product.price || 0),
+          quantity: qty
+        })
+      }
+      addFeed(true, 'Panier', 'Produit ajoute')
+      renderCheckoutCart()
     }
 
-    function renderDelivery(order) {
-      if (!order) {
-        s('shop-delivery').textContent = 'Aucune commande active.'
+    function renderCheckoutCart() {
+      if (!state.cart.length) {
+        el('checkout-cart').textContent = 'Panier vide'
+        return
+      }
+      const lines = state.cart.map(item => item.name + ' x' + item.quantity + ' = ' + money(item.quantity * item.price))
+      const total = state.cart.reduce((sum, item) => sum + item.quantity * item.price, 0)
+      el('checkout-cart').textContent = lines.join('\n') + '\n----------------\nTotal: ' + money(total)
+    }
+
+    function renderProductDetail() {
+      const detail = el('product-detail')
+      const product = state.selectedProduct
+      if (!product) {
+        detail.textContent = 'Selectionne un produit depuis le catalogue.'
         return
       }
 
+      detail.innerHTML =
+        '<div class="detail-hero">' +
+          '<h3>' + product.name + '</h3>' +
+          '<p class="meta">Prix: ' + money(product.price) + ' | Stock: ' + (product.stock || 0) + '</p>' +
+          '<p class="meta">' + (product.description || 'Produit du catalogue') + '</p>' +
+          '<ul class="detail-list">' +
+            '<li>Livraison estimee en 20-35 min</li>' +
+            '<li>Preparation prioritaire en cuisine</li>' +
+            '<li>Suivi en temps reel de la commande</li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="row"><span>Quantite</span><input id="detail-qty" type="number" min="1" value="1" /></div>'
+    }
+
+    function renderConfirmation() {
+      const view = el('confirmation-view')
+      const order = state.currentOrder
+      if (!order) {
+        view.textContent = 'Aucune commande confirmee.'
+        return
+      }
+
+      const eta = state.confirmationEta || '20-35 min'
+      const amount = money(order.totalAmount || 0)
+
+      view.innerHTML =
+        '<div class="confirm-box">' +
+          '<p class="confirm-title">Commande #' + order.id + ' confirmee</p>' +
+          '<div class="eta">Arrivee estimee: ' + eta + '</div>' +
+          '<div class="progress"><span></span></div>' +
+          '<p class="meta">Ton livreur se dirige vers le restaurant puis vers ton adresse.</p>' +
+          '<p class="meta">Montant de la commande: ' + amount + '</p>' +
+        '</div>'
+    }
+
+    function renderOrdersList() {
+      if (!state.orders.length) {
+        el('orders-list').textContent = 'Aucune commande chargee.'
+        return
+      }
+      const lines = state.orders.map(order => {
+        return '#' + order.id + ' | statut=' + order.status + ' | total=' + money(order.totalAmount)
+      })
+      el('orders-list').textContent = lines.join('\n')
+    }
+
+    function renderOrderTracker() {
+      const order = state.currentOrder
+      if (!order) {
+        el('order-tracker').textContent = 'Aucune commande active.'
+        return
+      }
       const status = order.status || 'PENDING'
       const idx = deliverySteps.indexOf(status)
-      const badges = deliverySteps.map((step, i) => {
+      const chips = deliverySteps.map((step, i) => {
         let cls = 'step'
         if (i < idx) {
           cls += ' done'
@@ -625,197 +941,263 @@ function shopHtml() {
         return '<div class="' + cls + '">' + step + '</div>'
       }).join('')
 
-      s('shop-delivery').innerHTML =
+      el('order-tracker').innerHTML =
         '<div><strong>Commande #' + order.id + '</strong></div>' +
-        '<div>Statut: ' + status + '</div>' +
-        '<div class="steps">' + badges + '</div>'
+        '<div>Statut courant: ' + status + '</div>' +
+        '<div class="steps">' + chips + '</div>'
     }
 
-    function addToCart(productId, quantity) {
-      const product = shopState.products.find(item => Number(item.id) === Number(productId))
-      if (!product) {
-        addFeed(false, 'Panier', 'Produit introuvable')
-        return
+    function register() {
+      const email = el('reg-email').value.trim()
+      const username = el('reg-username').value.trim()
+      const password = el('reg-password').value
+      if (!email || !username || !password) {
+        throw new Error('Email, username, password sont obligatoires')
       }
-
-      const qty = Number(quantity) > 0 ? Number(quantity) : 1
-      const existing = shopState.cart.find(item => Number(item.id) === Number(product.id))
-      if (existing) {
-        existing.quantity += qty
-      } else {
-        shopState.cart.push({
-          id: product.id,
-          name: product.name,
-          price: Number(product.price || 0),
-          quantity: qty
-        })
-      }
-
-      renderCart()
-      addFeed(true, 'Panier', 'Produit ajoute')
-    }
-
-    function ensureSession() {
-      if (shopState.token) {
-        return Promise.resolve()
-      }
-
-      const stamp = Date.now()
-      const email = 'shop+' + stamp + '@example.com'
-      const username = 'shop-' + stamp
-      const password = 'Pass1234!'
-
-      return callApi('/api/users/register', {
+      return apiCall('/api/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username, password })
+      }).then(() => {
+        addFeed(true, 'Inscription', 'Compte cree')
+        el('auth-status').textContent = 'Inscription OK. Tu peux faire login.'
       })
-        .then(user => {
-          shopState.user = user
-          return callApi('/api/users/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-          })
-        })
-        .then(token => {
-          shopState.token = token.access_token
-          addFeed(true, 'Session', 'Client connecte automatiquement')
-        })
+    }
+
+    function login() {
+      const email = el('reg-email').value.trim()
+      const password = el('login-password').value
+      if (!email || !password) {
+        throw new Error('Email et password sont obligatoires')
+      }
+      return apiCall('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      }).then(payload => {
+        state.token = payload.access_token
+        state.userId = decodeUserId(payload.access_token)
+        state.userEmail = email
+        saveSession()
+        renderSessionUi()
+        addFeed(true, 'Login', 'Connexion reussie')
+        return loadProducts().then(() => navigate('/catalog'))
+      })
+    }
+
+    function logout() {
+      state.token = null
+      state.userId = 0
+      state.userEmail = ''
+      state.cart = []
+      state.orders = []
+      state.currentOrder = null
+      state.selectedProduct = null
+      state.confirmationEta = null
+      clearSession()
+      renderSessionUi()
+      renderCheckoutCart()
+      renderOrdersList()
+      renderOrderTracker()
+      renderProductDetail()
+      renderConfirmation()
+      addFeed(true, 'Logout', 'Session fermee')
+      navigate('/login')
     }
 
     function loadProducts() {
-      return callApi('/api/products/products', { method: 'GET' }).then(payload => {
-        shopState.products = Array.isArray(payload) ? payload : (payload.data || [])
-        renderProducts()
-        addFeed(true, 'Catalogue', 'Produits charges depuis Product Service')
+      requireAuth()
+      return apiCall('/api/products/products', { method: 'GET' }).then(payload => {
+        state.products = Array.isArray(payload) ? payload : (payload.data || [])
+        renderCatalog()
+        addFeed(true, 'Catalogue', 'Produits charges')
       })
     }
 
-    function checkout() {
-      if (!shopState.cart.length) {
-        return Promise.reject(new Error('Panier vide'))
-      }
-
-      return ensureSession().then(() => {
-        const userId = shopState.user && shopState.user.id ? shopState.user.id : 1
-        const payload = {
-          userId,
-          items: shopState.cart.map(item => ({
-            productId: item.id,
-            quantity: item.quantity,
-            unitPrice: item.price
-          }))
-        }
-
-        return callApi('/api/orders', {
+    function seedProducts() {
+      requireAuth()
+      const demo = [
+        { name: 'Burger Maison', description: 'Pain brioche, boeuf, cheddar', price: 8.9, stock: 25, image_url: 'https://example.com/burger.png' },
+        { name: 'Pizza Pepperoni', description: 'Sauce tomate, mozzarella', price: 11.5, stock: 20, image_url: 'https://example.com/pizza.png' },
+        { name: 'Jus Orange Frais', description: 'Presse minute', price: 3.2, stock: 50, image_url: 'https://example.com/juice.png' }
+      ]
+      return Promise.all(demo.map(item => {
+        return apiCall('/api/products/products', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + shopState.token
-          },
-          body: JSON.stringify(payload)
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
         })
+      })).then(() => {
+        addFeed(true, 'Demo', 'Produits demo crees')
+        return loadProducts()
+      })
+    }
+
+    function placeOrder() {
+      requireAuth()
+      if (!state.cart.length) {
+        throw new Error('Panier vide')
+      }
+      const payload = {
+        userId: state.userId || 1,
+        items: state.cart.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          unitPrice: item.price
+        }))
+      }
+      return apiCall('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + state.token
+        },
+        body: JSON.stringify(payload)
       }).then(order => {
-        shopState.currentOrder = order
-        shopState.cart = []
-        renderCart()
-        renderDelivery(order)
-        addFeed(true, 'Checkout', 'Commande creee avec evenement livraison')
+        state.cart = []
+        state.currentOrder = order
+        const etaMin = 20 + Math.floor(Math.random() * 16)
+        const etaMax = etaMin + 12
+        state.confirmationEta = etaMin + '-' + etaMax + ' min'
+        addFeed(true, 'Commande', 'Commande creee avec succes')
+        renderCheckoutCart()
+        renderConfirmation()
+        return loadOrders().then(() => navigate('/confirmation'))
       })
     }
 
     function loadOrders() {
-      return ensureSession().then(() => {
-        const userId = shopState.user && shopState.user.id ? shopState.user.id : 1
-        return callApi('/api/orders/user/' + userId, {
-          method: 'GET',
-          headers: { Authorization: 'Bearer ' + shopState.token }
-        })
-      }).then(orders => {
-        const list = Array.isArray(orders) ? orders : []
-        if (list.length) {
-          shopState.currentOrder = list[0]
+      requireAuth()
+      return apiCall('/api/orders/user/' + (state.userId || 1), {
+        method: 'GET',
+        headers: { Authorization: 'Bearer ' + state.token }
+      }).then(payload => {
+        state.orders = Array.isArray(payload) ? payload : []
+        if (state.orders.length) {
+          state.currentOrder = state.orders.reduce((latest, current) => {
+            if (!latest) {
+              return current
+            }
+            return Number(current.id) > Number(latest.id) ? current : latest
+          }, state.orders[0])
         }
-        renderDelivery(shopState.currentOrder)
+        renderOrdersList()
+        renderOrderTracker()
         addFeed(true, 'Mes commandes', 'Historique charge')
       })
     }
 
     function updateStatus(status) {
-      if (!shopState.currentOrder || !shopState.currentOrder.id) {
-        return Promise.reject(new Error('Aucune commande active'))
+      requireAuth()
+      if (!state.currentOrder || !state.currentOrder.id) {
+        throw new Error('Aucune commande active')
       }
-
-      return ensureSession().then(() => {
-        return callApi('/api/orders/' + shopState.currentOrder.id + '/status?status=' + status, {
-          method: 'PATCH',
-          headers: { Authorization: 'Bearer ' + shopState.token }
-        })
+      return apiCall('/api/orders/' + state.currentOrder.id + '/status?status=' + status, {
+        method: 'PATCH',
+        headers: { Authorization: 'Bearer ' + state.token }
       }).then(order => {
-        shopState.currentOrder = order
-        renderDelivery(order)
-        addFeed(true, 'Livraison', 'Statut passe a ' + status)
+        state.currentOrder = order
+        state.orders = state.orders.map(item => item.id === order.id ? order : item)
+        renderOrdersList()
+        renderOrderTracker()
+        addFeed(true, 'Suivi', 'Statut passe a ' + status)
       })
     }
 
-    function loadServices() {
-      return fetch('/api/architecture/status').then(response => response.json()).then(payload => {
-        const strips = payload.services || []
-        s('shop-services').innerHTML = strips.map(service => {
-          const cls = service.status === 'down' ? 'service down' : 'service up'
-          const latency = service.latencyMs != null ? ' (' + service.latencyMs + 'ms)' : ''
-          return '<span class="' + cls + '">' + service.name + ': ' + service.status + latency + '</span>'
-        }).join('')
-        s('shop-last-sync').textContent = 'Sync services: ' + new Date(payload.checkedAt).toLocaleTimeString()
+    function bindEvents() {
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault()
+          const route = link.getAttribute('data-route')
+          navigate(route || '/login')
+        })
       })
-    }
 
-    function runAction(label, work) {
-      setShopBusy(true)
-      return work().catch(error => {
-        const message = error instanceof Error ? error.message : String(error)
-        addFeed(false, label, message)
-      }).finally(() => {
-        setShopBusy(false)
+      window.addEventListener('popstate', () => {
+        renderPage(window.location.pathname)
       })
-    }
 
-    function bindShop() {
-      s('shop-refresh').addEventListener('click', () => runAction('Catalogue', loadProducts))
-      s('shop-checkout').addEventListener('click', () => runAction('Checkout', checkout))
-      s('shop-orders').addEventListener('click', () => runAction('Mes commandes', loadOrders))
-      s('status-confirmed').addEventListener('click', () => runAction('Status', () => updateStatus('CONFIRMED')))
-      s('status-shipped').addEventListener('click', () => runAction('Status', () => updateStatus('SHIPPED')))
-      s('status-delivered').addEventListener('click', () => runAction('Status', () => updateStatus('DELIVERED')))
+      el('btn-register').addEventListener('click', () => withAction('Inscription', register))
+      el('btn-login').addEventListener('click', () => withAction('Login', login))
+      el('btn-logout').addEventListener('click', () => withAction('Logout', () => Promise.resolve(logout())))
 
-      s('shop-products').addEventListener('click', event => {
+      el('btn-refresh').addEventListener('click', () => withAction('Catalogue', loadProducts))
+      el('btn-seed').addEventListener('click', () => withAction('Demo', seedProducts))
+      el('btn-go-checkout').addEventListener('click', () => withAction('Navigation', () => Promise.resolve(navigate('/checkout'))))
+
+      el('catalog-grid').addEventListener('click', event => {
         const target = event.target
         if (!(target instanceof HTMLElement)) {
           return
         }
+
+        const viewId = target.getAttribute('data-view-product')
+        if (viewId) {
+          const selected = state.products.find(item => Number(item.id) === Number(viewId))
+          state.selectedProduct = selected || null
+          renderProductDetail()
+          navigate('/product')
+          return
+        }
+
         const id = target.getAttribute('data-add-product')
         if (!id) {
           return
         }
-        const input = s('shop-qty-' + id)
-        const quantity = input ? Number(input.value) : 1
+        const qtyInput = el('qty-' + id)
+        const quantity = qtyInput ? Number(qtyInput.value) : 1
         addToCart(Number(id), quantity)
       })
+
+      el('btn-clear-cart').addEventListener('click', () => withAction('Panier', () => {
+        state.cart = []
+        renderCheckoutCart()
+        addFeed(true, 'Panier', 'Panier vide')
+      }))
+
+      el('btn-detail-back').addEventListener('click', () => withAction('Navigation', () => Promise.resolve(navigate('/catalog'))))
+      el('btn-detail-checkout').addEventListener('click', () => withAction('Navigation', () => Promise.resolve(navigate('/checkout'))))
+      el('btn-detail-add').addEventListener('click', () => withAction('Panier', () => {
+        if (!state.selectedProduct) {
+          throw new Error('Aucun produit selectionne')
+        }
+        const qtyInput = el('detail-qty')
+        const quantity = qtyInput ? Number(qtyInput.value) : 1
+        addToCart(Number(state.selectedProduct.id), quantity)
+        addFeed(true, 'Produit', 'Ajoute depuis la page detail')
+      }))
+
+      el('btn-place-order').addEventListener('click', () => withAction('Commande', placeOrder))
+      el('btn-load-orders').addEventListener('click', () => withAction('Mes commandes', loadOrders))
+      el('btn-confirmed').addEventListener('click', () => withAction('Suivi', () => updateStatus('CONFIRMED')))
+      el('btn-shipped').addEventListener('click', () => withAction('Suivi', () => updateStatus('SHIPPED')))
+      el('btn-delivered').addEventListener('click', () => withAction('Suivi', () => updateStatus('DELIVERED')))
+
+      el('btn-confirmation-catalog').addEventListener('click', () => withAction('Navigation', () => Promise.resolve(navigate('/catalog'))))
+      el('btn-confirmation-orders').addEventListener('click', () => withAction('Navigation', () => Promise.resolve(navigate('/orders'))))
     }
 
     ;(function boot() {
-      bindShop()
-      renderCart()
-      renderDelivery(null)
-      loadProducts().catch(() => {
-        addFeed(false, 'Catalogue', 'Impossible de charger les produits')
-      })
-      loadServices().catch(() => {
-        addFeed(false, 'Services', 'Impossible de lire le statut des services')
-      })
-      setInterval(loadServices, 5000)
-      addFeed(true, 'Boutique', 'Interface client prete')
+      bindEvents()
+      renderSessionUi()
+      renderCheckoutCart()
+      renderOrdersList()
+      renderOrderTracker()
+      renderCatalog()
+
+      const initialPath = normalizePath(window.location.pathname)
+      if (protectedPaths.includes(initialPath) && !state.token) {
+        history.replaceState({}, '', '/login')
+        renderPage('/login')
+      } else {
+        history.replaceState({}, '', initialPath)
+        renderPage(initialPath)
+        if (state.token && initialPath === '/catalog') {
+          withAction('Catalogue', loadProducts)
+        }
+      }
+
+      addFeed(true, 'App', 'Interface e-commerce prete')
     })()
   </script>
 </body>
@@ -2193,14 +2575,28 @@ app.get('/api/architecture/status', async (req, res) => {
     });
 });
 app.get('/architecture', (req, res) => {
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.send(architectureHtml());
+    res.redirect('/');
 });
 app.get('/admin', (req, res) => {
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.send(architectureHtml());
+    res.redirect('/');
 });
 app.get('/shop', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(shopHtml());
+});
+app.get('/login', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(shopHtml());
+});
+app.get('/catalog', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(shopHtml());
+});
+app.get('/checkout', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(shopHtml());
+});
+app.get('/orders', (req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(shopHtml());
 });
