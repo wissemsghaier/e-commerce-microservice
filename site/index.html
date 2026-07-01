@@ -3,44 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Microservices Architecture Canvas</title>
+    <title>Service Tester</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
 
       :root {
-        --bg-0: #eaf5ff;
-        --bg-1: #f8fbff;
+        --bg: #f2f8ff;
+        --panel: #ffffff;
+        --line: #b7d3eb;
         --ink: #1c2d43;
-        --muted: #4d637e;
-        --panel: #ffffffea;
-        --line: #9fc4e4;
+        --muted: #5a6f88;
         --accent: #ff6b35;
-        --ok: #1a8f5a;
-        --ko: #d02d2d;
-        --warn: #cf7f1f;
-        --soft-blue: #e7f4ff;
-        --service-blue: #b6daf6;
-        --gateway-red: #f7d8d1;
-        --client-green: #d9f2dd;
-        --rabbit-gold: #ffe1ac;
+        --ok: #1f9a63;
+        --ko: #dc3f3f;
       }
 
       body[data-theme="dark"] {
-        --bg-0: #122037;
-        --bg-1: #0e1a2d;
-        --ink: #e5eeff;
-        --muted: #a7bbda;
-        --panel: #13243ae8;
-        --line: #335a87;
-        --accent: #ff8a54;
-        --ok: #32c17a;
-        --ko: #ff6b6b;
-        --warn: #efb244;
-        --soft-blue: #162a45;
-        --service-blue: #294f77;
-        --gateway-red: #5b3130;
-        --client-green: #214534;
-        --rabbit-gold: #6a5429;
+        --bg: #0f1c30;
+        --panel: #172943;
+        --line: #355983;
+        --ink: #e7efff;
+        --muted: #a2b9da;
+        --accent: #ff8d5a;
+        --ok: #3ac07f;
+        --ko: #ff7474;
       }
 
       * {
@@ -49,394 +35,113 @@
 
       body {
         margin: 0;
+        background: radial-gradient(circle at 15% 10%, #ffffff 0, var(--bg) 55%);
         color: var(--ink);
-        font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
-        min-height: 100vh;
-        background:
-          radial-gradient(circle at 10% 10%, #ffffff 0%, var(--bg-0) 34%, transparent 60%),
-          radial-gradient(circle at 85% 15%, #fff1e5 0%, transparent 35%),
-          linear-gradient(135deg, #eaf4ff, var(--bg-1));
+        font-family: "Space Grotesk", sans-serif;
       }
 
-      .container {
-        max-width: 1320px;
-        margin: 18px auto 26px;
+      .app {
+        max-width: 1150px;
+        margin: 16px auto 30px;
         padding: 0 14px;
       }
 
-      .hero {
+      .header {
         border: 1px solid var(--line);
+        border-radius: 14px;
         background: var(--panel);
-        border-radius: 16px;
-        padding: 14px;
-        backdrop-filter: blur(4px);
-        box-shadow: 0 14px 30px -24px #28547d;
-      }
-
-      .hero-top {
+        padding: 12px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        align-items: center;
+        gap: 10px;
       }
 
-      .brand {
-        display: grid;
-        gap: 6px;
-      }
-
-      .brand-badge {
-        width: fit-content;
-        border: 1px solid #b8cee4;
-        background: #f0f8ff;
-        border-radius: 999px;
-        padding: 4px 10px;
-        font-size: 0.75rem;
-        letter-spacing: 0.03em;
-      }
-
-      .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .hero-actions .split {
-        width: 1px;
-        background: #bfd3e8;
-        margin: 2px 1px;
-      }
-
-      .hero h1 {
+      .header h1 {
         margin: 0;
-        font-size: clamp(1.2rem, 2vw, 2rem);
+        font-size: clamp(1.2rem, 2.2vw, 1.8rem);
       }
 
-      .hero p {
-        margin: 8px 0 0;
+      .header p {
+        margin: 4px 0 0;
         color: var(--muted);
       }
 
-      .stack {
-        margin-top: 10px;
+      .toolbar {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-      }
-
-      .stack span {
-        border: 1px solid #c7ddf2;
-        background: #edf6ff;
-        border-radius: 999px;
-        padding: 4px 10px;
-        font-size: 0.83rem;
       }
 
       .kpis {
         margin-top: 10px;
         display: grid;
-        gap: 10px;
+        gap: 9px;
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
       .kpi {
-        border: 1px solid #b7d3eb;
-        background: #f9fcff;
+        border: 1px solid var(--line);
         border-radius: 12px;
+        background: var(--panel);
         padding: 10px;
       }
 
       .kpi strong {
         display: block;
-        font-size: 1.28rem;
+        font-size: 1.2rem;
       }
 
       .kpi span {
         color: var(--muted);
-        font-size: 0.85rem;
+        font-size: 0.84rem;
       }
 
-      .board {
-        margin-top: 12px;
-        border: 3px dashed #75afe0;
-        border-radius: 16px;
-        background: #ffffffc7;
-        padding: 12px;
-      }
-
-      .topology {
-        position: relative;
+      .grid {
+        margin-top: 10px;
         display: grid;
-        gap: 10px;
-        grid-template-columns: 1fr 0.82fr 1.52fr 0.98fr;
-      }
-
-      .lane {
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 10px;
-        background: #ffffffef;
-        min-height: 340px;
-        box-shadow: 0 10px 20px -22px #204d73;
-      }
-
-      .lane h2 {
-        margin: 0 0 10px;
-        font-size: 1rem;
-        letter-spacing: 0.02em;
-      }
-
-      .node {
-        border: 1px solid #9fc5e7;
-        border-radius: 12px;
-        padding: 9px;
-        background: linear-gradient(120deg, #fafdff, #ebf6ff);
-        margin-bottom: 8px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .node:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 9px 16px -16px #2d5f8c;
-      }
-
-      .node strong {
-        display: block;
-        margin-bottom: 3px;
-      }
-
-      .node small {
-        color: #4b6580;
-      }
-
-      .status {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 6px;
-        font-size: 0.79rem;
-      }
-
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--warn);
-        box-shadow: 0 0 0 0 rgba(207, 127, 31, 0.4);
-        animation: pulse 1.6s infinite;
-        color: rgba(207, 127, 31, 0.4);
-      }
-
-      .dot.ok {
-        background: var(--ok);
-        box-shadow: 0 0 0 0 rgba(26, 143, 90, 0.4);
-        color: rgba(26, 143, 90, 0.4);
-      }
-
-      .dot.ko {
-        background: var(--ko);
-        box-shadow: 0 0 0 0 rgba(208, 45, 45, 0.4);
-        color: rgba(208, 45, 45, 0.4);
-      }
-
-      @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 currentColor; }
-        70% { box-shadow: 0 0 0 8px transparent; }
-        100% { box-shadow: 0 0 0 0 transparent; }
-      }
-
-      .mini-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .client-card {
-        border: 2px solid #7eb27a;
-        background: linear-gradient(130deg, #e8f8e9, var(--client-green));
-      }
-
-      .gateway-shell {
-        height: calc(100% - 34px);
-        min-height: 285px;
-        display: grid;
-        place-items: center;
-      }
-
-      .gateway-core {
-        border: 2px solid #c36e63;
-        background: linear-gradient(180deg, #fbe5df, var(--gateway-red));
-        border-radius: 14px;
-        width: 78%;
-        min-height: 280px;
-        display: grid;
-        place-items: center;
-        text-align: center;
-        writing-mode: vertical-rl;
-        transform: rotate(180deg);
-        font-weight: 700;
-        letter-spacing: 0.03em;
-      }
-
-      .service-grid {
-        display: grid;
-        gap: 8px;
-      }
-
-      .service-card {
-        border: 2px solid #88b6de;
-        background: linear-gradient(120deg, #f9fdff, var(--soft-blue));
-      }
-
-      .service-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .service-icon {
-        width: 26px;
-        height: 26px;
-        border-radius: 8px;
-        border: 1px solid #8fb6d7;
-        display: grid;
-        place-items: center;
-        font-size: 0.8rem;
-        background: #fff;
-      }
-
-      .db-mini {
-        border: 1px solid #8fb9dc;
-        border-radius: 9px;
-        padding: 6px 8px;
-        font-size: 0.79rem;
-        margin-top: 7px;
-        background: #eef7ff;
-      }
-
-      .db-mini b {
-        display: block;
-        margin-bottom: 3px;
-      }
-
-      .rabbit-column {
-        display: grid;
-        grid-template-rows: auto auto 1fr;
-        gap: 8px;
-      }
-
-      .logo-rack {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-      }
-
-      .logo-rack span {
-        border: 1px solid #d2dde9;
-        background: #f7fbff;
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 0.76rem;
-      }
-
-      .rabbit {
-        min-height: 270px;
-        border: 2px solid #d59b43;
-        border-radius: 999px;
-        display: grid;
-        place-items: center;
-        text-align: center;
-        background: linear-gradient(180deg, #fff1d8, var(--rabbit-gold));
-        font-weight: 700;
-      }
-
-      .rabbit small {
-        display: block;
-        font-weight: 600;
-        opacity: 0.8;
-      }
-
-      .floating-db {
-        display: grid;
-        gap: 6px;
-      }
-
-      .floating-db .db {
-        border: 1px solid #8fb9dc;
-        border-radius: 10px;
-        padding: 6px;
-        font-size: 0.81rem;
-        background: #eef7ff;
-      }
-
-      .links {
-        pointer-events: none;
-        position: absolute;
-        inset: 0;
-      }
-
-      .links path {
-        stroke: #4d6f90;
-        stroke-width: 1.6;
-        fill: none;
-        stroke-dasharray: 5 4;
-        animation: flow 1.2s linear infinite;
-      }
-
-      @keyframes flow {
-        to { stroke-dashoffset: -18; }
-      }
-
-      .console {
-        margin-top: 12px;
-        display: grid;
-        grid-template-columns: 1.15fr 1fr;
+        grid-template-columns: 1.2fr 1fr;
         gap: 10px;
       }
 
       .panel {
         border: 1px solid var(--line);
         border-radius: 14px;
-        background: #ffffffde;
+        background: var(--panel);
         padding: 12px;
-        box-shadow: 0 10px 20px -20px #275a85;
       }
 
-      .panel h3 {
-        margin: 0 0 8px;
-      }
-
-      .panel h3 + p {
+      .panel h2 {
         margin: 0 0 10px;
-        color: var(--muted);
-        font-size: 0.85rem;
+        font-size: 1rem;
       }
 
       .forms {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 9px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .group {
-        border: 1px solid #d0e1f2;
+        border: 1px solid var(--line);
         border-radius: 11px;
-        padding: 8px;
-        background: #f7fbff;
+        padding: 9px;
       }
 
-      .group h4 {
-        margin: 0 0 7px;
+      .group h3 {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
       }
 
-      .group input {
+      input {
         width: 100%;
-        border: 1px solid #b9cfe4;
+        border: 1px solid var(--line);
         border-radius: 9px;
         padding: 8px;
         margin-bottom: 6px;
         font-family: "JetBrains Mono", monospace;
+        background: transparent;
+        color: var(--ink);
       }
 
       .actions {
@@ -446,19 +151,13 @@
       }
 
       button {
-        border: 1px solid #bed5ea;
+        border: 1px solid var(--line);
         border-radius: 9px;
-        background: #fefefe;
-        color: #23405f;
-        font-weight: 600;
         padding: 8px 10px;
+        font-weight: 600;
         cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 8px 18px -16px #275986;
+        background: transparent;
+        color: var(--ink);
       }
 
       button.primary {
@@ -467,38 +166,59 @@
         border-color: var(--accent);
       }
 
-      button.ghost {
-        background: #eef6ff;
+      .status-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 7px;
+      }
+
+      .status-item {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .badge {
+        font-size: 0.75rem;
+        border-radius: 999px;
+        padding: 3px 8px;
+        border: 1px solid transparent;
+      }
+
+      .badge.ok {
+        border-color: color-mix(in srgb, var(--ok) 60%, #ffffff);
+        color: var(--ok);
+      }
+
+      .badge.ko {
+        border-color: color-mix(in srgb, var(--ko) 60%, #ffffff);
+        color: var(--ko);
       }
 
       pre {
         margin: 0;
-        min-height: 260px;
-        border-radius: 12px;
-        padding: 12px;
+        min-height: 215px;
+        border-radius: 11px;
         background: #0f1d33;
         color: #dbe7ff;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.84rem;
-        line-height: 1.45;
+        padding: 11px;
         overflow: auto;
-      }
-
-      .healthline {
-        margin-top: 8px;
-        color: var(--muted);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.83rem;
       }
 
       .timeline {
         margin-top: 10px;
-        border: 1px solid #b4ceea;
-        border-radius: 12px;
-        background: #f6fbff;
-        padding: 10px;
       }
 
-      .timeline h4 {
-        margin: 0 0 8px;
+      .timeline h3 {
+        margin: 0 0 7px;
+        font-size: 0.95rem;
       }
 
       .timeline-list {
@@ -507,364 +227,125 @@
         padding: 0;
         display: grid;
         gap: 6px;
-        max-height: 220px;
+        max-height: 195px;
         overflow: auto;
       }
 
       .timeline-item {
-        border: 1px solid #cae1f4;
+        border: 1px solid var(--line);
         border-radius: 9px;
-        background: #ffffff;
         padding: 7px;
         font-size: 0.82rem;
       }
 
       .timeline-item b {
         display: block;
-        color: #2a4669;
       }
 
-      .timeline-item span {
+      .muted {
         color: var(--muted);
       }
 
-      .timeline-empty {
-        color: var(--muted);
-        font-size: 0.82rem;
-      }
-
-      body[data-theme="dark"] .board,
-      body[data-theme="dark"] .hero,
-      body[data-theme="dark"] .panel,
-      body[data-theme="dark"] .lane,
-      body[data-theme="dark"] .kpi,
-      body[data-theme="dark"] .group,
-      body[data-theme="dark"] .node,
-      body[data-theme="dark"] .timeline,
-      body[data-theme="dark"] .timeline-item,
-      body[data-theme="dark"] .brand-badge,
-      body[data-theme="dark"] .stack span,
-      body[data-theme="dark"] .floating-db .db,
-      body[data-theme="dark"] .db-mini,
-      body[data-theme="dark"] .logo-rack span,
-      body[data-theme="dark"] button.ghost,
-      body[data-theme="dark"] button {
-        background: #162a45;
-        color: var(--ink);
-        border-color: #3a608b;
-      }
-
-      body[data-theme="dark"] .client-card {
-        background: #1f3f31;
-      }
-
-      body[data-theme="dark"] .gateway-core {
-        background: #55302f;
-        color: #ffe9e6;
-      }
-
-      body[data-theme="dark"] .rabbit {
-        background: #554426;
-        color: #fff3d8;
-      }
-
-      body[data-theme="dark"] pre {
-        background: #0a1527;
-      }
-
-      @media print {
-        body {
-          background: #fff;
-        }
-
-        .hero-actions,
-        #btn-demo,
-        #btn-order,
-        #btn-product,
-        #btn-user,
-        #btn-users,
-        #btn-products,
-        #btn-orders {
-          display: none !important;
-        }
-
-        .container {
-          max-width: 100%;
-          margin: 0;
-          padding: 0;
-        }
-
-        .hero,
-        .board,
-        .panel,
-        .lane,
-        .kpi,
-        .group,
-        .timeline,
-        .timeline-item {
-          box-shadow: none !important;
-          break-inside: avoid;
-        }
-      }
-
-      .fade-in {
-        animation: fadeInUp 0.45s ease both;
-      }
-
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @media (max-width: 1050px) {
-        .hero-top {
+      @media (max-width: 980px) {
+        .header {
           flex-direction: column;
           align-items: flex-start;
         }
 
-        .hero-actions .split {
-          display: none;
-        }
-
-        .topology {
+        .kpis {
           grid-template-columns: 1fr 1fr;
         }
 
-        .links {
-          display: none;
-        }
-
-        .console {
+        .grid {
           grid-template-columns: 1fr;
         }
 
         .forms {
           grid-template-columns: 1fr;
         }
-
-        .kpis {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        .gateway-core {
-          writing-mode: horizontal-tb;
-          transform: none;
-          width: 100%;
-          min-height: 74px;
-        }
-      }
-
-      @media (max-width: 700px) {
-        .kpis {
-          grid-template-columns: 1fr;
-        }
       }
     </style>
   </head>
   <body>
-    <main class="container">
-      <section class="hero fade-in">
-        <div class="hero-top">
-          <div class="brand">
-            <span class="brand-badge">MICROSERVICES CONTROL PLANE</span>
-            <h1>Architecture Diagram Mode</h1>
-          </div>
-          <div class="hero-actions">
-            <button class="ghost" id="btn-theme-toggle">Dark mode</button>
-            <div class="split"></div>
-            <button class="ghost" id="btn-export-json">Export JSON</button>
-            <button class="ghost" id="btn-export-pdf">Export PDF</button>
-            <div class="split"></div>
-            <button class="ghost" id="btn-refresh-health">Refresh Health</button>
-            <button class="primary" id="btn-run-demo-top">Run End-to-End Demo</button>
-          </div>
+    <main class="app">
+      <header class="header">
+        <div>
+          <h1>Interface unique de test des services</h1>
+          <p>Teste user-service, product-service et order-service depuis un seul ecran.</p>
         </div>
-        <p>Representation professionnelle: Client Apps -> API Gateway -> Microservices -> RabbitMQ/Data.</p>
-        <div class="stack">
-          <span>Shopping.Web</span>
-          <span>Gateway Nginx</span>
-          <span>User/Python + PostgreSQL</span>
-          <span>Product/Go + PostgreSQL</span>
-          <span>Order/Node + PostgreSQL</span>
-          <span>RabbitMQ column (visual)</span>
+        <div class="toolbar">
+          <button id="btn-theme">Dark mode</button>
+          <button id="btn-refresh">Refresh</button>
+          <button id="btn-export-json">Export JSON</button>
+          <button id="btn-export-pdf">Export PDF</button>
+          <button class="primary" id="btn-demo-top">Run Demo</button>
         </div>
+      </header>
 
-        <div class="kpis">
-          <article class="kpi">
-            <strong id="kpi-users">-</strong>
-            <span>Users en base</span>
-          </article>
-          <article class="kpi">
-            <strong id="kpi-products">-</strong>
-            <span>Produits en base</span>
-          </article>
-          <article class="kpi">
-            <strong id="kpi-orders">-</strong>
-            <span>Commandes en base</span>
-          </article>
-          <article class="kpi">
-            <strong id="kpi-health">-</strong>
-            <span id="kpi-updated">Derniere verification: -</span>
-          </article>
-        </div>
+      <section class="kpis">
+        <article class="kpi"><strong id="kpi-users">-</strong><span>Users</span></article>
+        <article class="kpi"><strong id="kpi-products">-</strong><span>Produits</span></article>
+        <article class="kpi"><strong id="kpi-orders">-</strong><span>Commandes</span></article>
+        <article class="kpi"><strong id="kpi-health">-</strong><span id="kpi-updated">Derniere verification: -</span></article>
       </section>
 
-      <section class="board">
-        <div class="topology">
-          <svg class="links" viewBox="0 0 1200 380" preserveAspectRatio="none">
-            <path d="M120,120 C250,120 300,120 380,120" />
-            <path d="M470,120 C570,88 650,76 740,74" />
-            <path d="M470,120 C570,120 650,155 740,170" />
-            <path d="M470,120 C570,165 650,244 740,266" />
-            <path d="M900,74 C975,74 1020,100 1075,120" />
-            <path d="M900,170 C975,170 1020,165 1075,158" />
-            <path d="M900,266 C975,266 1020,225 1075,205" />
-          </svg>
-
-          <article class="lane">
-            <h2>Client Apps</h2>
-            <div class="node client-card">
-              <strong>Shopping.Web</strong>
-              <small>Port 8080</small>
-              <div class="status"><span class="dot" id="dot-site"></span><span id="txt-site">checking...</span></div>
-            </div>
-            <div class="mini-grid">
-              <div class="node"><strong>Desktop</strong><small>Browser access</small></div>
-              <div class="node"><strong>Mobile</strong><small>Responsive UI</small></div>
-            </div>
-            <div class="node">
-              <strong>Runtime Tags</strong>
-              <small>.NET style architecture feel<br/>polyglot backend execution</small>
-            </div>
-          </article>
-
-          <article class="lane">
-            <h2>API Gateway</h2>
-            <div class="gateway-shell">
-              <div class="gateway-core">
-                Nginx API Gateway
-              </div>
-            </div>
-            <div class="node">
-              <strong>Routes</strong>
-              <small>/api/users -> user-service<br/>/api/products -> product-service<br/>/api/orders -> order-service</small>
-              <div class="status"><span class="dot" id="dot-gateway"></span><span id="txt-gateway">routing</span></div>
-            </div>
-          </article>
-
-          <article class="lane">
-            <h2>Microservices</h2>
-            <div class="service-grid">
-              <div class="node service-card">
-                <div class="service-head">
-                  <strong>User Service</strong>
-                  <span class="service-icon">PY</span>
-                </div>
-                <small>FastAPI | /users</small>
-                <div class="db-mini" id="db-users"><b>DB</b>users_db</div>
-                <div class="status"><span class="dot" id="dot-users"></span><span id="txt-users">checking...</span></div>
-              </div>
-
-              <div class="node service-card">
-                <div class="service-head">
-                  <strong>Product Service</strong>
-                  <span class="service-icon">GO</span>
-                </div>
-                <small>Gin | /products</small>
-                <div class="db-mini" id="db-products"><b>DB</b>products_db</div>
-                <div class="status"><span class="dot" id="dot-products"></span><span id="txt-products">checking...</span></div>
-              </div>
-
-              <div class="node service-card">
-                <div class="service-head">
-                  <strong>Order Service</strong>
-                  <span class="service-icon">JS</span>
-                </div>
-                <small>Express | /orders</small>
-                <div class="db-mini" id="db-orders"><b>DB</b>orders_db</div>
-                <div class="status"><span class="dot" id="dot-orders"></span><span id="txt-orders">checking...</span></div>
-              </div>
-            </div>
-          </article>
-
-          <article class="lane">
-            <h2>Data / Messaging</h2>
-            <div class="rabbit-column">
-              <div class="logo-rack">
-                <span>Docker</span>
-                <span>PostgreSQL</span>
-                <span>RabbitMQ</span>
-              </div>
-              <div class="rabbit">
-                RabbitMQ
-                <small>message bus</small>
-                <div class="status"><span class="dot" id="dot-rabbit"></span><span id="txt-rabbit">planned</span></div>
-              </div>
-              <div class="floating-db">
-                <div class="db">users_db</div>
-                <div class="db">products_db</div>
-                <div class="db">orders_db</div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="console">
+      <section class="grid">
         <article class="panel">
-          <h3>Execution Console</h3>
+          <h2>Tests APIs</h2>
           <div class="forms">
-            <div class="group">
-              <h4>User</h4>
+            <section class="group">
+              <h3>User</h3>
               <input id="u-name" placeholder="Name" />
               <input id="u-email" placeholder="Email" />
               <div class="actions">
                 <button class="primary" id="btn-user">Create</button>
                 <button id="btn-users">List</button>
               </div>
-            </div>
+            </section>
 
-            <div class="group">
-              <h4>Product</h4>
+            <section class="group">
+              <h3>Product</h3>
               <input id="p-name" placeholder="Product name" />
               <input id="p-price" type="number" step="0.01" placeholder="Price" />
               <div class="actions">
                 <button class="primary" id="btn-product">Create</button>
                 <button id="btn-products">List</button>
               </div>
-            </div>
+            </section>
 
-            <div class="group">
-              <h4>Order</h4>
+            <section class="group">
+              <h3>Order</h3>
               <input id="o-user" type="number" placeholder="userId" />
               <input id="o-product" type="number" placeholder="productId" />
-              <input id="o-qty" type="number" value="1" min="1" placeholder="qty" />
+              <input id="o-qty" type="number" min="1" value="1" placeholder="quantity" />
               <div class="actions">
                 <button class="primary" id="btn-order">Create</button>
                 <button id="btn-orders">List</button>
-                <button id="btn-demo">Run Demo Flow</button>
+                <button id="btn-demo">Run Demo</button>
               </div>
-            </div>
+            </section>
           </div>
-          <p class="healthline" id="health-summary">etat global: checking...</p>
+
+          <div class="timeline">
+            <h3>Timeline</h3>
+            <ul class="timeline-list" id="timeline-list">
+              <li class="muted" id="timeline-empty">Aucun event.</li>
+            </ul>
+          </div>
         </article>
 
         <article class="panel">
-          <h3>Output</h3>
-          <p>Console technique des appels et operations backend.</p>
+          <h2>Status services</h2>
+          <ul class="status-list">
+            <li class="status-item"><span>site</span><span class="badge" id="badge-site">checking</span></li>
+            <li class="status-item"><span>gateway</span><span class="badge" id="badge-gateway">checking</span></li>
+            <li class="status-item"><span>users</span><span class="badge" id="badge-users">checking</span></li>
+            <li class="status-item"><span>products</span><span class="badge" id="badge-products">checking</span></li>
+            <li class="status-item"><span>orders</span><span class="badge" id="badge-orders">checking</span></li>
+          </ul>
+
+          <h2 style="margin-top: 10px;">Output</h2>
           <pre id="out">Ready.</pre>
-          <section class="timeline">
-            <h4>Mini Timeline (temps reel)</h4>
-            <ul class="timeline-list" id="timeline-list">
-              <li class="timeline-empty" id="timeline-empty">Aucun event pour le moment.</li>
-            </ul>
-          </section>
         </article>
       </section>
     </main>
@@ -877,144 +358,65 @@
       };
 
       const out = document.getElementById("out");
-      const healthSummary = document.getElementById("health-summary");
       const timelineList = document.getElementById("timeline-list");
-      const themeToggleBtn = document.getElementById("btn-theme-toggle");
-
-      const dashboardState = {
-        theme: localStorage.getItem("ms_theme") || "light",
-        health: {
-          users: false,
-          products: false,
-          orders: false,
-          site: true,
-          gateway: true,
-          rabbit: false
-        },
-        kpis: {
-          users: 0,
-          products: 0,
-          orders: 0,
-          serviceUp: "0/3 services up"
-        },
-        lastUpdated: "-",
+      const state = {
+        theme: localStorage.getItem("tester_theme") || "light",
+        health: { site: true, gateway: true, users: false, products: false, orders: false },
+        kpis: { users: 0, products: 0, orders: 0, serviceUp: "0/3 services up" },
+        updatedAt: "-",
         events: []
       };
 
-      let previousHealthSignature = "";
+      function now() {
+        return new Date().toLocaleString("fr-FR");
+      }
 
-      function logEvent(type, message, level = "info") {
-        const event = {
-          at: stampNow(),
-          type,
-          level,
-          message
-        };
+      function setTheme(theme) {
+        state.theme = theme;
+        document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+        document.getElementById("btn-theme").textContent = theme === "dark" ? "Light mode" : "Dark mode";
+        localStorage.setItem("tester_theme", theme);
+      }
 
-        dashboardState.events.unshift(event);
-        dashboardState.events = dashboardState.events.slice(0, 40);
+      function toggleTheme() {
+        setTheme(state.theme === "dark" ? "light" : "dark");
+        addEvent("theme", "Theme switched to " + state.theme);
+      }
+
+      function addEvent(type, message) {
+        const item = { at: now(), type, message };
+        state.events.unshift(item);
+        state.events = state.events.slice(0, 40);
 
         const empty = document.getElementById("timeline-empty");
         if (empty) {
           empty.remove();
         }
 
-        const item = document.createElement("li");
-        item.className = "timeline-item";
-        item.innerHTML =
-          "<b>[" + event.at + "] " + event.type + "</b>" +
-          "<span>" + event.message + "</span>";
+        const li = document.createElement("li");
+        li.className = "timeline-item";
+        li.innerHTML = "<b>[" + item.at + "] " + item.type + "</b><span>" + item.message + "</span>";
+        timelineList.prepend(li);
 
-        timelineList.prepend(item);
         while (timelineList.children.length > 40) {
           timelineList.removeChild(timelineList.lastChild);
         }
       }
 
-      function applyTheme(theme) {
-        dashboardState.theme = theme;
-        document.body.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
-        themeToggleBtn.textContent = theme === "dark" ? "Light mode" : "Dark mode";
-        localStorage.setItem("ms_theme", theme);
-      }
-
-      function toggleTheme() {
-        const next = dashboardState.theme === "dark" ? "light" : "dark";
-        applyTheme(next);
-        logEvent("theme", "Theme switched to " + next, "info");
-      }
-
-      function getArchitectureSnapshot() {
-        return {
-          exportedAt: stampNow(),
-          architecture: "client -> gateway -> microservices -> databases",
-          theme: dashboardState.theme,
-          health: dashboardState.health,
-          kpis: dashboardState.kpis,
-          lastUpdated: dashboardState.lastUpdated,
-          recentEvents: dashboardState.events.slice(0, 20)
-        };
-      }
-
-      function downloadTextFile(filename, content, mimeType) {
-        const blob = new Blob([content], { type: mimeType });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(link.href);
-      }
-
-      function exportArchitectureJson() {
-        const snapshot = getArchitectureSnapshot();
-        downloadTextFile(
-          "architecture-state-" + Date.now() + ".json",
-          JSON.stringify(snapshot, null, 2),
-          "application/json"
-        );
-        logEvent("export", "Architecture JSON exported", "info");
-      }
-
-      function exportArchitecturePdf() {
-        logEvent("export", "PDF export opened (print dialog)", "info");
-        window.print();
+      function setBadge(id, ok, text) {
+        const badge = document.getElementById("badge-" + id);
+        badge.textContent = text;
+        badge.classList.remove("ok", "ko");
+        badge.classList.add(ok ? "ok" : "ko");
       }
 
       function setKpi(id, value) {
-        const item = document.getElementById(id);
-        item.textContent = String(value);
-      }
-
-      function stampNow() {
-        return new Date().toLocaleString("fr-FR");
-      }
-
-      function setDbCard(id, ok) {
-        const card = document.getElementById(id);
-        card.style.borderColor = ok ? "#6dac92" : "#cb7c7c";
-        card.style.background = ok ? "#ecfff4" : "#fff1f1";
-      }
-
-      function setStatus(key, ok, text) {
-        const dot = document.getElementById("dot-" + key);
-        const txt = document.getElementById("txt-" + key);
-        dot.classList.remove("ok", "ko");
-        dot.classList.add(ok ? "ok" : "ko");
-        txt.textContent = text;
+        document.getElementById(id).textContent = String(value);
       }
 
       function show(data) {
         const payload = typeof data === "string" ? { message: data } : data;
-        out.textContent = JSON.stringify(
-          {
-            at: stampNow(),
-            ...payload
-          },
-          null,
-          2
-        );
+        out.textContent = JSON.stringify({ at: now(), ...payload }, null, 2);
       }
 
       async function req(url, options) {
@@ -1036,69 +438,75 @@
           fetch(API.orders + "/health")
         ]);
 
-        const userOk = checks[0].status === "fulfilled" && checks[0].value.ok;
-        const productOk = checks[1].status === "fulfilled" && checks[1].value.ok;
-        const orderOk = checks[2].status === "fulfilled" && checks[2].value.ok;
-        const siteOk = true;
-        const gatewayOk = true;
-        const rabbitOk = orderOk;
+        state.health.users = checks[0].status === "fulfilled" && checks[0].value.ok;
+        state.health.products = checks[1].status === "fulfilled" && checks[1].value.ok;
+        state.health.orders = checks[2].status === "fulfilled" && checks[2].value.ok;
 
-        dashboardState.health = {
-          users: userOk,
-          products: productOk,
-          orders: orderOk,
-          site: siteOk,
-          gateway: gatewayOk,
-          rabbit: rabbitOk
-        };
+        setBadge("site", true, "up");
+        setBadge("gateway", true, "up");
+        setBadge("users", state.health.users, state.health.users ? "healthy" : "down");
+        setBadge("products", state.health.products, state.health.products ? "healthy" : "down");
+        setBadge("orders", state.health.orders, state.health.orders ? "healthy" : "down");
 
-        setStatus("site", siteOk, siteOk ? "up" : "down");
-        setStatus("gateway", gatewayOk, gatewayOk ? "routing" : "down");
-        setStatus("users", userOk, userOk ? "healthy" : "error");
-        setStatus("products", productOk, productOk ? "healthy" : "error");
-        setStatus("orders", orderOk, orderOk ? "healthy" : "error");
-        setStatus("rabbit", rabbitOk, rabbitOk ? "active" : "standby");
-
-        setDbCard("db-users", userOk);
-        setDbCard("db-products", productOk);
-        setDbCard("db-orders", orderOk);
-
-        const allUp = userOk && productOk && orderOk;
-        const okCount = [userOk, productOk, orderOk].filter(Boolean).length;
-        const serviceUp = okCount + "/3 services up";
-        setKpi("kpi-health", serviceUp);
-        dashboardState.kpis.serviceUp = serviceUp;
-        const now = stampNow();
-        dashboardState.lastUpdated = now;
-        document.getElementById("kpi-updated").textContent = "Derniere verification: " + now;
-        healthSummary.textContent =
-          "etat global: " + (allUp ? "all systems operational" : "degraded topology, check service output");
-
-        const signature = [userOk, productOk, orderOk].join("|");
-        if (signature !== previousHealthSignature) {
-          previousHealthSignature = signature;
-          logEvent("health", "Service health changed to " + serviceUp, allUp ? "info" : "warn");
-        }
+        const up = [state.health.users, state.health.products, state.health.orders].filter(Boolean).length;
+        state.kpis.serviceUp = up + "/3 services up";
+        setKpi("kpi-health", state.kpis.serviceUp);
       }
 
       async function refreshKpis() {
-        const [usersRes, productsRes, ordersRes] = await Promise.allSettled([
+        const [users, products, orders] = await Promise.allSettled([
           req(API.users + "/users"),
           req(API.products + "/products"),
           req(API.orders + "/orders")
         ]);
 
-        setKpi("kpi-users", usersRes.status === "fulfilled" ? usersRes.value.length : "-");
-        setKpi("kpi-products", productsRes.status === "fulfilled" ? productsRes.value.length : "-");
-        setKpi("kpi-orders", ordersRes.status === "fulfilled" ? ordersRes.value.length : "-");
+        state.kpis.users = users.status === "fulfilled" ? users.value.length : "-";
+        state.kpis.products = products.status === "fulfilled" ? products.value.length : "-";
+        state.kpis.orders = orders.status === "fulfilled" ? orders.value.length : "-";
 
-        dashboardState.kpis.users = usersRes.status === "fulfilled" ? usersRes.value.length : "-";
-        dashboardState.kpis.products = productsRes.status === "fulfilled" ? productsRes.value.length : "-";
-        dashboardState.kpis.orders = ordersRes.status === "fulfilled" ? ordersRes.value.length : "-";
+        setKpi("kpi-users", state.kpis.users);
+        setKpi("kpi-products", state.kpis.products);
+        setKpi("kpi-orders", state.kpis.orders);
+
+        state.updatedAt = now();
+        document.getElementById("kpi-updated").textContent = "Derniere verification: " + state.updatedAt;
       }
 
-      async function refreshDashboard() {
+      async function refreshAll() {
         await Promise.allSettled([refreshHealth(), refreshKpis()]);
+      }
+
+      function snapshot() {
+        return {
+          exportedAt: now(),
+          mode: "single test interface",
+          theme: state.theme,
+          health: state.health,
+          kpis: state.kpis,
+          updatedAt: state.updatedAt,
+          events: state.events.slice(0, 20)
+        };
+      }
+
+      function downloadFile(name, content, type) {
+        const blob = new Blob([content], { type });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = name;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(link.href);
+      }
+
+      function exportJson() {
+        downloadFile("service-tester-" + Date.now() + ".json", JSON.stringify(snapshot(), null, 2), "application/json");
+        addEvent("export", "JSON exported");
+      }
+
+      function exportPdf() {
+        addEvent("export", "PDF export opened");
+        window.print();
       }
 
       document.getElementById("btn-user").onclick = async () => {
@@ -1109,22 +517,22 @@
           };
           const created = await req(API.users + "/users", { method: "POST", body: JSON.stringify(payload) });
           show(created);
-          logEvent("create-user", "User #" + created.id + " created", "info");
-          refreshHealth();
+          addEvent("create-user", "User #" + created.id + " created");
+          refreshAll();
         } catch (e) {
-          logEvent("create-user", e.message, "error");
           show(e.message);
+          addEvent("create-user", e.message);
         }
       };
 
       document.getElementById("btn-users").onclick = async () => {
         try {
-          const users = await req(API.users + "/users");
-          show(users);
-          logEvent("list-users", users.length + " users loaded", "info");
+          const data = await req(API.users + "/users");
+          show(data);
+          addEvent("list-users", data.length + " users loaded");
         } catch (e) {
-          logEvent("list-users", e.message, "error");
           show(e.message);
+          addEvent("list-users", e.message);
         }
       };
 
@@ -1136,22 +544,22 @@
           };
           const created = await req(API.products + "/products", { method: "POST", body: JSON.stringify(payload) });
           show(created);
-          logEvent("create-product", "Product #" + created.id + " created", "info");
-          refreshHealth();
+          addEvent("create-product", "Product #" + created.id + " created");
+          refreshAll();
         } catch (e) {
-          logEvent("create-product", e.message, "error");
           show(e.message);
+          addEvent("create-product", e.message);
         }
       };
 
       document.getElementById("btn-products").onclick = async () => {
         try {
-          const products = await req(API.products + "/products");
-          show(products);
-          logEvent("list-products", products.length + " products loaded", "info");
+          const data = await req(API.products + "/products");
+          show(data);
+          addEvent("list-products", data.length + " products loaded");
         } catch (e) {
-          logEvent("list-products", e.message, "error");
           show(e.message);
+          addEvent("list-products", e.message);
         }
       };
 
@@ -1164,22 +572,22 @@
           };
           const created = await req(API.orders + "/orders", { method: "POST", body: JSON.stringify(payload) });
           show(created);
-          logEvent("create-order", "Order #" + created.id + " created", "info");
-          refreshHealth();
+          addEvent("create-order", "Order #" + created.id + " created");
+          refreshAll();
         } catch (e) {
-          logEvent("create-order", e.message, "error");
           show(e.message);
+          addEvent("create-order", e.message);
         }
       };
 
       document.getElementById("btn-orders").onclick = async () => {
         try {
-          const orders = await req(API.orders + "/orders");
-          show(orders);
-          logEvent("list-orders", orders.length + " orders loaded", "info");
+          const data = await req(API.orders + "/orders");
+          show(data);
+          addEvent("list-orders", data.length + " orders loaded");
         } catch (e) {
-          logEvent("list-orders", e.message, "error");
           show(e.message);
+          addEvent("list-orders", e.message);
         }
       };
 
@@ -1188,55 +596,38 @@
           const stamp = Date.now();
           const user = await req(API.users + "/users", {
             method: "POST",
-            body: JSON.stringify({
-              name: "Demo User " + String(stamp).slice(-4),
-              email: "demo" + stamp + "@mail.com"
-            })
+            body: JSON.stringify({ name: "Demo User " + String(stamp).slice(-4), email: "demo" + stamp + "@mail.com" })
           });
-
           const product = await req(API.products + "/products", {
             method: "POST",
-            body: JSON.stringify({
-              name: "Demo Product " + String(stamp).slice(-4),
-              price: 12.5
-            })
+            body: JSON.stringify({ name: "Demo Product " + String(stamp).slice(-4), price: 12.5 })
           });
-
           const order = await req(API.orders + "/orders", {
             method: "POST",
-            body: JSON.stringify({
-              userId: user.id,
-              productId: product.id,
-              quantity: 2
-            })
+            body: JSON.stringify({ userId: user.id, productId: product.id, quantity: 2 })
           });
-
           show({ flow: "demo-complete", user, product, order });
-          logEvent("demo", "End-to-end demo flow completed", "info");
-          refreshDashboard();
+          addEvent("demo", "Demo flow completed");
+          refreshAll();
         } catch (e) {
-          logEvent("demo", e.message, "error");
           show(e.message);
+          addEvent("demo", e.message);
         }
       };
 
-      document.getElementById("btn-refresh-health").onclick = () => {
-        logEvent("manual-refresh", "Dashboard refresh requested", "info");
-        refreshDashboard();
+      document.getElementById("btn-demo-top").onclick = () => document.getElementById("btn-demo").click();
+      document.getElementById("btn-refresh").onclick = () => {
+        addEvent("refresh", "Manual refresh requested");
+        refreshAll();
       };
+      document.getElementById("btn-export-json").onclick = exportJson;
+      document.getElementById("btn-export-pdf").onclick = exportPdf;
+      document.getElementById("btn-theme").onclick = toggleTheme;
 
-      document.getElementById("btn-run-demo-top").onclick = () => {
-        document.getElementById("btn-demo").click();
-      };
-
-      document.getElementById("btn-theme-toggle").onclick = toggleTheme;
-      document.getElementById("btn-export-json").onclick = exportArchitectureJson;
-      document.getElementById("btn-export-pdf").onclick = exportArchitecturePdf;
-
-      applyTheme(dashboardState.theme);
-      logEvent("system", "Dashboard initialized", "info");
-      refreshDashboard();
-      setInterval(refreshDashboard, 7000);
+      setTheme(state.theme);
+      addEvent("system", "Service tester ready");
+      refreshAll();
+      setInterval(refreshAll, 7000);
     </script>
   </body>
 </html>
