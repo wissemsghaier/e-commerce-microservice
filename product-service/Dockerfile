@@ -1,20 +1,18 @@
-# Étape 1 : compilation (Mis à jour en 1.25)
-FROM golang:1.25-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
-COPY go.mod go.sum* ./
+COPY go.mod ./
 RUN go mod download
 
-COPY . .
+COPY main.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o product-service main.go
 
-# Étape 2 : image finale, légère
-FROM alpine:3.19
+FROM alpine:3.20
 
 WORKDIR /app
 RUN apk add --no-cache wget
-COPY --from=builder /app/product-service .
+COPY --from=builder /app/product-service ./product-service
 
 EXPOSE 8002
 

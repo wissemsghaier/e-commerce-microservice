@@ -1,98 +1,11 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  # ---------- Bases de données ----------
-  db-users:
-    image: postgres:15-alpine
-    container_name: db-users
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: users_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_user_data:/var/lib/postgresql/data
-    networks:
-      - devsecops-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  db-products:
-    image: postgres:15-alpine
-    container_name: db-products
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: products_db
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_product_data:/var/lib/postgresql/data
-    networks:
-      - devsecops-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  db-orders:
-    image: postgres:15-alpine
-    container_name: db-orders
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: orders_db
-    ports:
-      - "5434:5432"
-    volumes:
-      - postgres_order_data:/var/lib/postgresql/data
-    networks:
-      - devsecops-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # ---------- Message broker ----------
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: password
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    networks:
-      - devsecops-network
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # ---------- Microservices ----------
   user-service:
     build: ./user-service
     container_name: user-service
     ports:
       - "8001:8001"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@db-users:5432/users_db
-      - JWT_SECRET=${JWT_SECRET}  # 👈 Va lire la valeur du fichier .env
-    depends_on:
-      db-users:
-        condition: service_healthy
-    networks:
-      - devsecops-network
     healthcheck:
       test:
         [
@@ -103,28 +16,20 @@ services:
         ]
       interval: 10s
       timeout: 5s
-      retries: 6
-      start_period: 20s
+      retries: 5
+      start_period: 10s
 
   product-service:
     build: ./product-service
     container_name: product-service
     ports:
       - "8002:8002"
-    environment:
-      # GORM (Go) attend le format DSN "key=value", pas une URL
-      - DATABASE_URL=host=db-products user=postgres password=password dbname=products_db port=5432 sslmode=disable
-    depends_on:
-      db-products:
-        condition: service_healthy
-    networks:
-      - devsecops-network
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8002/health || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 6
-      start_period: 20s
+      retries: 5
+      start_period: 10s
 
   order-service:
     build: ./order-service
@@ -132,37 +37,25 @@ services:
     ports:
       - "8003:8003"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-orders:5432/orders_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=admin
-      - SPRING_RABBITMQ_PASSWORD=password
-    depends_on:
-      db-orders:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - devsecops-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8003/orders/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 45s
-
-  api-gateway:
-    build: ./api-gateway
-    container_name: api-gateway
-    ports:
-      - "3000:3000"
-    environment:
-      - JWT_SECRET=${JWT_SECRET}  # 👈 Va lire la valeur du fichier .env
       - USER_SERVICE_URL=http://user-service:8001
       - PRODUCT_SERVICE_URL=http://product-service:8002
-      - ORDER_SERVICE_URL=http://order-service:8003
+    depends_on:
+      user-service:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8003/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  site:
+    build: ./site
+    container_name: microservices-site
+    ports:
+      - "8080:80"
     depends_on:
       user-service:
         condition: service_healthy
@@ -170,15 +63,3 @@ services:
         condition: service_healthy
       order-service:
         condition: service_healthy
-    networks:
-      - devsecops-network
-
-volumes:
-  postgres_user_data:
-  postgres_product_data:
-  postgres_order_data:
-  rabbitmq_data:
-
-networks:
-  devsecops-network:
-    driver: bridge

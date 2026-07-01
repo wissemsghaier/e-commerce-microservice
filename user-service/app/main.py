@@ -1,47 +1,46 @@
-from fastapi import FastAPI, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from .database import engine, get_db, Base
-from .models import User
-from .schemas import UserCreate, UserResponse, LoginRequest, Token
-from .auth import hash_password, verify_password, create_token
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, EmailStr
 
-Base.metadata.create_all(bind=engine)
+app = FastAPI(title="user-service", version="1.0.0")
 
-app = FastAPI(title="User Service", version="1.0.0")
+
+class UserCreate(BaseModel):
+    name: str
+    email: EmailStr
+
+
+users = [{"id": 1, "name": "Alice", "email": "alice@example.com"}]
+next_user_id = 2
+
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "service": "user-service", "language": "python"}
 
-@app.head("/health", status_code=200)
-def health_head():
-    return
 
-@app.post("/register", response_model=UserResponse, status_code=201)
-def register(payload: UserCreate, db: Session = Depends(get_db)):
-    if db.query(User).filter(User.email == payload.email).first():
-        raise HTTPException(400, "Email déjà utilisé")
-    user = User(
-        email=payload.email,
-        username=payload.username,
-        hashed_password=hash_password(payload.password)
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+@app.get("/users")
+def get_users():
+    return users
+
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    user = next((u for u in users if u["id"] == user_id), None)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@app.post("/login", response_model=Token)
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == payload.email).first()
-    if not user or not verify_password(payload.password, user.hashed_password):
-        raise HTTPException(401, "Identifiants incorrects")
-    token = create_token({"sub": str(user.id), "email": user.email})
-    return {"access_token": token}
 
-@app.get("/me", response_model=UserResponse)
-def get_me(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(404, "Utilisateur introuvable")
+@app.post("/users", status_code=201)
+def create_user(payload: UserCreate):
+    global next_user_id
+
+    email = payload.email.lower()
+    exists = any(u["email"] == email for u in users)
+    if exists:
+        raise HTTPException(status_code=409, detail="Email already exists")
+
+    user = {"id": next_user_id, "name": payload.name.strip(), "email": email}
+    next_user_id += 1
+    users.append(user)
     return user
