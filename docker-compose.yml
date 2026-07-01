@@ -120,7 +120,7 @@ services:
     networks:
       - devsecops-network
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8002/health || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8002/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 6
@@ -147,7 +147,7 @@ services:
     networks:
       - devsecops-network
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8003/orders/health || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8003/orders/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
